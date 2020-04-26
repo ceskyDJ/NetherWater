@@ -9,6 +9,8 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.ItemStack;
 
 public class WaterPlaceListener implements Listener {
 	Main plugin;
@@ -35,8 +37,20 @@ public class WaterPlaceListener implements Listener {
 						int y = e.getClickedBlock().getRelative(e.getBlockFace()).getY();
 						if (y <= plugin.getConfig().getInt("maxHeight")) {
 							if (y >= plugin.getConfig().getInt("minHeight")) {
+								// Cancel native event actions
 								e.setCancelled(true);
+
+								// Add watter block
 								e.getClickedBlock().getRelative(e.getBlockFace()).setType(Material.WATER);
+
+								// Replace water bucket with empty one
+								ItemStack emptyBucket = new ItemStack(Material.BUCKET);
+
+								if (e.getHand() == EquipmentSlot.HAND) {
+									p.getInventory().setItemInMainHand(emptyBucket);
+								} else if (e.getHand() == EquipmentSlot.OFF_HAND) {
+									p.getInventory().setItemInOffHand(emptyBucket);
+								}
 							}
 						}
 					}
