@@ -6,7 +6,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
 public class NWReloadCommand implements CommandExecutor {
-
 	Main plugin;
 	
 	public NWReloadCommand(Main plugin) {
@@ -15,7 +14,6 @@ public class NWReloadCommand implements CommandExecutor {
 	
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-
 		if (!sender.hasPermission("netherwater.reload")) {
 
 			sender.sendMessage(ChatColor.RED + "You do not have permission to do that!");
@@ -28,6 +26,5 @@ public class NWReloadCommand implements CommandExecutor {
 			return true;
 
 		}
-
 	}
 }

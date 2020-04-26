@@ -1,7 +1,7 @@
 name: NetherWater
-version: 1.0.3
+version: 1.0.4
 description: Allow players to use water in the nether
-author: Lee Tzilantonis
+author: Lee Tzilantonis, ceskyDJ
 main: com.leetzilantonis.netherwater.Main
 database: false
 commands:
