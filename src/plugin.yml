@@ -1,15 +1,21 @@
 name: NetherWater
 version: 1.0.5
 description: Allow players to use water in the nether
-author: Lee Tzilantonis, ceskyDJ
+authors: [Lee Tzilantonis, ceskyDJ]
+
 main: com.leetzilantonis.netherwater.NetherWater
 database: false
 api-version: 1.15
+softdepend:
+  - WorldEdit
+  - WorldGuard
+
 commands:
   nwreload:
     description: Reload the Nether Water configuration
     aliases: [nwr]
     usage: /nwreload or /nwr
+
 permissions:
   netherwater.use.*:
     description: Allows players to use water in all non disabled nether worlds

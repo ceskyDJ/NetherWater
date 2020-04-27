@@ -1,7 +1,7 @@
-disabledWorlds:
+disabled-worlds:
   - nether_without_water
-maxHeight: 999
-minHeight: 0
+max-height: 999
+min-height: 0
 messages:
   permissions: "You do not have permission to do that!"
   config-reload: "Nether Water configuration reloaded!"

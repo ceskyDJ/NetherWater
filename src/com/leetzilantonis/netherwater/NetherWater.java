@@ -1,8 +1,5 @@
 package com.leetzilantonis.netherwater;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.sk89q.worldedit.util.Location;
 import com.sk89q.worldedit.world.World;
 import com.sk89q.worldguard.LocalPlayer;
@@ -26,10 +23,12 @@ public class NetherWater extends JavaPlugin {
 	public void onEnable() {
 		this.configManager = new ConfigManager(this);
 
-		if ((this.worldGuard = this.getWorldGuard()) == null) {
-			this.getLogger().warning("World Guard cannot be found!");
-		} else {
-			this.getLogger().info("World Guard has been found a registered!");
+		try {
+			this.worldGuard = this.getWorldGuard();
+			this.getLogger().info("World Guard has been found and registered!");
+		} catch (PluginNotFoundException e) {
+			this.worldGuard = null;
+			this.getLogger().warning("World Guard cannot be found.");
 		}
 
 		this.getServer().getPluginManager().registerEvents(new WaterPlaceListener(this), this);
@@ -43,12 +42,11 @@ public class NetherWater extends JavaPlugin {
 		this.saveConfig();
 	}
 
-	private WorldGuardPlugin getWorldGuard() {
-		Plugin plugin = getServer().getPluginManager().getPlugin("WorldGuard");
+	private WorldGuardPlugin getWorldGuard() throws PluginNotFoundException {
+		Plugin plugin = this.getServer().getPluginManager().getPlugin("WorldGuard");
 
-		// WorldGuard may not be loaded
 		if (!(plugin instanceof WorldGuardPlugin)) {
-			return null; // Maybe you want throw an exception instead
+			throw new PluginNotFoundException("Plugin WorldGuard hasn't been found.");
 		}
 
 		return (WorldGuardPlugin) plugin;

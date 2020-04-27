@@ -29,7 +29,7 @@ public class ConfigManager {
     }
 
     public List<String> getDisabledWorlds() {
-        return this.plugin.getConfig().getStringList("disabledWorlds");
+        return this.plugin.getConfig().getStringList("disabled-worlds");
     }
 
     public String getMessage(String name) {
@@ -37,10 +37,10 @@ public class ConfigManager {
     }
 
     public int getMinHeight() {
-        return plugin.getConfig().getInt("minHeight");
+        return plugin.getConfig().getInt("min-height");
     }
 
     public int getMaxHeight() {
-        return plugin.getConfig().getInt("maxHeight");
+        return plugin.getConfig().getInt("max-height");
     }
 }

@@ -11,7 +11,7 @@ public class NWReloadCommand implements CommandExecutor {
 
 	public NWReloadCommand(NetherWater plugin) {
 		this.plugin = plugin;
-		this.configManager = plugin.getConfigManager();
+		this.configManager = this.plugin.getConfigManager();
 	}
 
 	@Override
