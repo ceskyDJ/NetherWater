@@ -6,25 +6,23 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
 public class NWReloadCommand implements CommandExecutor {
-	Main plugin;
-	
-	public NWReloadCommand(Main plugin) {
+	private final NetherWater plugin;
+	private final ConfigManager configManager;
+
+	public NWReloadCommand(NetherWater plugin) {
 		this.plugin = plugin;
+		this.configManager = plugin.getConfigManager();
 	}
-	
+
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		if (!sender.hasPermission("netherwater.reload")) {
-
-			sender.sendMessage(ChatColor.RED + "You do not have permission to do that!");
-			return true;
-
+			sender.sendMessage(ChatColor.RED + this.configManager.getMessage("permissions"));
 		} else {
-
-			plugin.reloadConfig();
-			sender.sendMessage(ChatColor.GREEN + "Nether Water configuration reloaded!");
-			return true;
-
+			this.configManager.reloadConfig();
+			sender.sendMessage(ChatColor.GREEN + this.configManager.getMessage("config-reload"));
 		}
+
+		return true;
 	}
 }

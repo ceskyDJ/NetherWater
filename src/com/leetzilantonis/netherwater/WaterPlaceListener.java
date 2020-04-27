@@ -9,14 +9,14 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.EquipmentSlot;
-import org.bukkit.inventory.ItemStack;
 
 public class WaterPlaceListener implements Listener {
-	Main plugin;
+	private final NetherWater plugin;
+	private final ConfigManager configManager;
 
-	public WaterPlaceListener(Main plugin) {
+	public WaterPlaceListener(NetherWater plugin) {
 		this.plugin = plugin;
+		this.configManager = plugin.getConfigManager();
 	}
 
 	@EventHandler (priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -30,32 +30,32 @@ public class WaterPlaceListener implements Listener {
 		World w = e.getClickedBlock().getWorld();
 		Player p = e.getPlayer();
 
-		if (w.getEnvironment() == Environment.NETHER && e.getItem().getType() == Material.WATER_BUCKET) {
-			if (p.hasPermission("netherwater.use." + w.getName()) || p.hasPermission("netherwater.use.*")) {
-				if (!plugin.getWorlds().contains(w.getName()) || p.hasPermission("netherwater.world.bypass")) {
-					if (plugin.canBuild(p, e.getClickedBlock().getRelative(e.getBlockFace()))) {
-						int y = e.getClickedBlock().getRelative(e.getBlockFace()).getY();
-						if (y <= plugin.getConfig().getInt("maxHeight")) {
-							if (y >= plugin.getConfig().getInt("minHeight")) {
-								// Cancel native event actions
-								e.setCancelled(true);
+		if (w.getEnvironment() == Environment.NETHER && e.getItem().getType() == Material.WATER_BUCKET)
+			return;
 
-								// Add watter block
-								e.getClickedBlock().getRelative(e.getBlockFace()).setType(Material.WATER);
+		if (p.hasPermission("netherwater.use." + w.getName()) || p.hasPermission("netherwater.use.*"))
+			return;
 
-								// Replace water bucket with empty one
-								ItemStack emptyBucket = new ItemStack(Material.BUCKET);
+		if (!this.configManager.getDisabledWorlds().contains(w.getName()) || p.hasPermission("netherwater.world.bypass"))
+			return;
 
-								if (e.getHand() == EquipmentSlot.HAND) {
-									p.getInventory().setItemInMainHand(emptyBucket);
-								} else if (e.getHand() == EquipmentSlot.OFF_HAND) {
-									p.getInventory().setItemInOffHand(emptyBucket);
-								}
-							}
-						}
-					}
-				}
-			}
-		}
+		if (plugin.canBuild(p, e.getClickedBlock().getRelative(e.getBlockFace())))
+			return;
+
+		int y = e.getClickedBlock().getRelative(e.getBlockFace()).getY();
+		if (y <= this.configManager.getMaxHeight())
+			return;
+
+		if (y >= this.configManager.getMinHeight())
+			return;
+
+		// Cancel native event actions
+		e.setCancelled(true);
+
+		// Add watter block
+		e.getClickedBlock().getRelative(e.getBlockFace()).setType(Material.WATER);
+
+		// Replace water bucket with empty one
+		e.getItem().setType(Material.BUCKET);
 	}
 }

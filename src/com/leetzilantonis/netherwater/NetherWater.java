@@ -1,6 +1,5 @@
 package com.leetzilantonis.netherwater;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,18 +17,16 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 
-public class Main extends JavaPlugin {
-	private List<String> dWorlds = new ArrayList<String>();
-	private WorldGuardPlugin wg;
+public class NetherWater extends JavaPlugin {
+	private WorldGuardPlugin worldGuard;
+
+	private ConfigManager configManager;
 
 	@Override
 	public void onEnable() {
-		if(!getDataFolder().exists()) getDataFolder().mkdir();
-        if(!new File(getDataFolder(), "config.yml").exists()) saveDefaultConfig();
+		this.configManager = new ConfigManager(this);
 
-		this.dWorlds = this.getConfig().getStringList("disabledWorlds");
-
-		if ((this.wg = this.getWorldGuard()) == null) {
+		if ((this.worldGuard = this.getWorldGuard()) == null) {
 			this.getLogger().warning("World Guard cannot be found!");
 		} else {
 			this.getLogger().info("World Guard has been found a registered!");
@@ -58,11 +55,11 @@ public class Main extends JavaPlugin {
 	}
 
 	public boolean canBuild(Player p, Block b) {
-		if (this.wg == null) {
+		if (this.worldGuard == null) {
 			return true;
 		}
 
-		LocalPlayer wgPlayer = this.wg.wrapPlayer(p);
+		LocalPlayer wgPlayer = this.worldGuard.wrapPlayer(p);
 		World weWorld = wgPlayer.getWorld();
 		Location location = new Location(weWorld, b.getX(), b.getY(), b.getZ());
 		RegionContainer regionContainer = WorldGuard.getInstance().getPlatform().getRegionContainer();
@@ -73,7 +70,7 @@ public class Main extends JavaPlugin {
 		return canBypass || regionQuery.testState(location, wgPlayer, Flags.BUILD);
 	}
 
-	public List<String> getWorlds() {
-		return dWorlds;
+	public ConfigManager getConfigManager() {
+		return configManager;
 	}
 }
