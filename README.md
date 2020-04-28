@@ -1,6 +1,8 @@
 # NetherWater
 Simple Spigot plugin that allows players to use water buckets and ice blocks in nether worlds.
 
+This is a fork of [KlutzyBubbles/NetherWater](https://github.com/KlutzyBubbles/NetherWater) repository.
+
 ## Commands
 - /nwreload or /nwr - reload plugin configuration
 
