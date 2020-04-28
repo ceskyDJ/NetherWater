@@ -9,3 +9,4 @@ Simple Bukkit/Spigot plugin that allows players to use water buckets in the neth
 - netherwater.use.* - using plugin features in all worlds
 - netherwater.world.bypass - turn on plugin features in disabled worlds for same group of players
 - netherwater.reload - use /nwreload (or /nwr) command
+- netherwater.* - every permissions of this plugin
