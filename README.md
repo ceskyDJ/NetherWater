@@ -1,7 +1,7 @@
 # NetherWater
 Simple Bukkit/Spigot plugin that allows players to use water buckets in the nether
 
-# Commands
+## Commands
 - /nwreload or /nwr - reload plugin configuration
 
 ## Permissions
