@@ -28,6 +28,10 @@ public class ConfigManager {
         this.plugin.reloadConfig();
     }
 
+    public boolean isDebugOn() {
+        return this.plugin.getConfig().getBoolean("debug");
+    }
+
     public List<String> getDisabledWorlds() {
         return this.plugin.getConfig().getStringList("disabled-worlds");
     }
@@ -37,10 +41,10 @@ public class ConfigManager {
     }
 
     public int getMinHeight() {
-        return plugin.getConfig().getInt("min-height");
+        return this.plugin.getConfig().getInt("min-height");
     }
 
     public int getMaxHeight() {
-        return plugin.getConfig().getInt("max-height");
+        return this.plugin.getConfig().getInt("max-height");
     }
 }

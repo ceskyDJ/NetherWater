@@ -1,3 +1,5 @@
+# Allow using debug dumps. It's not recommended on production servers.
+debug: false
 disabled-worlds:
   - nether_without_water
 max-height: 999

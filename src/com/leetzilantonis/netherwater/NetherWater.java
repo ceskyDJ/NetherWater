@@ -7,6 +7,7 @@ import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.protection.flags.Flags;
 import com.sk89q.worldguard.protection.regions.RegionContainer;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
+import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -69,6 +70,12 @@ public class NetherWater extends JavaPlugin {
 	}
 
 	public ConfigManager getConfigManager() {
-		return configManager;
+		return this.configManager;
+	}
+
+	public void dump(String message) {
+		if (this.configManager.isDebugOn()) {
+			this.getServer().getConsoleSender().sendMessage(ChatColor.YELLOW + "[NetherWater] " + message);
+		}
 	}
 }
