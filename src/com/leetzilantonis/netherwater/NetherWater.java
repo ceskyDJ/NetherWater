@@ -33,6 +33,7 @@ public class NetherWater extends JavaPlugin {
 		}
 
 		this.getServer().getPluginManager().registerEvents(new WaterPlaceListener(this), this);
+		this.getServer().getPluginManager().registerEvents(new BlockBreakListener(this), this);
 		this.getCommand("nwreload").setExecutor(new NWReloadCommand(this));
 
 		this.getLogger().info("Plugin loaded successfully");
@@ -53,22 +54,6 @@ public class NetherWater extends JavaPlugin {
 		return (WorldGuardPlugin) plugin;
 	}
 
-	public boolean canBuild(Player p, Block b) {
-		if (this.worldGuard == null) {
-			return true;
-		}
-
-		LocalPlayer wgPlayer = this.worldGuard.wrapPlayer(p);
-		World weWorld = wgPlayer.getWorld();
-		Location location = new Location(weWorld, b.getX(), b.getY(), b.getZ());
-		RegionContainer regionContainer = WorldGuard.getInstance().getPlatform().getRegionContainer();
-		RegionQuery regionQuery = regionContainer.createQuery();
-
-		boolean canBypass = WorldGuard.getInstance().getPlatform().getSessionManager().hasBypass(wgPlayer, weWorld);
-
-		return canBypass || regionQuery.testState(location, wgPlayer, Flags.BUILD);
-	}
-
 	public ConfigManager getConfigManager() {
 		return this.configManager;
 	}
@@ -77,5 +62,52 @@ public class NetherWater extends JavaPlugin {
 		if (this.configManager.isDebugOn()) {
 			this.getServer().getConsoleSender().sendMessage(ChatColor.YELLOW + "[NetherWater] " + message);
 		}
+	}
+
+	public boolean canBuild(Player player, Block block) {
+		if (this.worldGuard == null) {
+			return true;
+		}
+
+		LocalPlayer wgPlayer = this.worldGuard.wrapPlayer(player);
+		World weWorld = wgPlayer.getWorld();
+		Location location = new Location(weWorld, block.getX(), block.getY(), block.getZ());
+		RegionContainer regionContainer = WorldGuard.getInstance().getPlatform().getRegionContainer();
+		RegionQuery regionQuery = regionContainer.createQuery();
+
+		boolean canBypass = WorldGuard.getInstance().getPlatform().getSessionManager().hasBypass(wgPlayer, weWorld);
+
+		return canBypass || regionQuery.testState(location, wgPlayer, Flags.BUILD);
+	}
+
+	public boolean canBeUsedThisPlugin(Player player, Block block) {
+		org.bukkit.World world = block.getWorld();
+
+		if (world.getEnvironment() != org.bukkit.World.Environment.NETHER) {
+			return false;
+		}
+
+		if (!(player.hasPermission("netherwater.use." + world.getName()) || player.hasPermission("netherwater.use.*"))) {
+			return false;
+		}
+
+		if (this.configManager.getDisabledWorlds().contains(world.getName()) && !player.hasPermission("netherwater.world.bypass")) {
+			return false;
+		}
+
+		if (!this.canBuild(player, block)) {
+			return false;
+		}
+
+		int y = block.getY();
+		if (y > this.configManager.getMaxHeight()) {
+			return false;
+		}
+
+		if (y < this.configManager.getMinHeight()) {
+			return false;
+		}
+
+		return true;
 	}
 }

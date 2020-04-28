@@ -2,8 +2,7 @@ package com.leetzilantonis.netherwater;
 
 import org.bukkit.GameMode;
 import org.bukkit.Material;
-import org.bukkit.World;
-import org.bukkit.World.Environment;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -15,12 +14,9 @@ import java.util.Objects;
 
 public class WaterPlaceListener implements Listener {
 	private final NetherWater plugin;
-	private final ConfigManager configManager;
 
 	public WaterPlaceListener(NetherWater plugin) {
 		this.plugin = plugin;
-
-		this.configManager = this.plugin.getConfigManager();
 	}
 
 	@EventHandler (priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -39,34 +35,15 @@ public class WaterPlaceListener implements Listener {
 			return;
 		}
 
-		World world = event.getClickedBlock().getWorld();
 		Player player = event.getPlayer();
-
-		if (world.getEnvironment() != Environment.NETHER) {
-			return;
-		}
+		Block selectedBlock = event.getClickedBlock().getRelative(event.getBlockFace());
 
 		if (event.getItem() == null || event.getItem().getType() != Material.WATER_BUCKET) {
 			return;
 		}
 
-		if (!(player.hasPermission("netherwater.use." + world.getName()) || player.hasPermission("netherwater.use.*"))) {
-			return;
-		}
-
-		if (this.configManager.getDisabledWorlds().contains(world.getName()) && !player.hasPermission("netherwater.world.bypass")) {
-			return;
-		}
-
-		if (!plugin.canBuild(player, event.getClickedBlock().getRelative(event.getBlockFace())))
-			return;
-
-		int y = event.getClickedBlock().getRelative(event.getBlockFace()).getY();
-		if (y > this.configManager.getMaxHeight()) {
-			return;
-		}
-
-		if (y < this.configManager.getMinHeight()) {
+		// Check general conditions for using this plugin (world type, player permissions, world height etc.)
+		if (!this.plugin.canBeUsedThisPlugin(player, selectedBlock)) {
 			return;
 		}
 
