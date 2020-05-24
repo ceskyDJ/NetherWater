@@ -9,7 +9,8 @@ This is a fork of [KlutzyBubbles/NetherWater](https://github.com/KlutzyBubbles/N
 ## Permissions
 - netherwater.use.WORLD - using plugin features in some world
 - netherwater.use.* - using plugin features in all worlds
-- netherwater.world.bypass - turn on plugin features in disabled worlds for same group of players
+- netherwater.world.bypass - turn on plugin features in disabled worlds for some players
+- netherwater.spread.bypass - disable spread limits for some players - **needs to allow this feature in config file!**
 - netherwater.reload - use /nwreload (or /nwr) command
 - netherwater.* - every permissions of this plugin
 
@@ -32,6 +33,8 @@ disabled-worlds:
 max-height: 999
 # Min world height (Y coordinate) to use plugin features
 min-height: 0
+# Spread limits bypass for OP players or players with netherwater.spread.bypass permission
+spread-bypass: false
 # Messages for translation
 # Change only text in quotation marks ("")!
 # If you need to use quotation mark in your text, use \" instead

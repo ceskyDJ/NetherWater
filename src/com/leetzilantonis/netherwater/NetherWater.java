@@ -7,6 +7,7 @@ import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.protection.flags.Flags;
 import com.sk89q.worldguard.protection.regions.RegionContainer;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -110,5 +111,20 @@ public class NetherWater extends JavaPlugin {
 		}
 
 		return true;
+	}
+
+	public Player getClosestPlayer(org.bukkit.Location location) {
+		// From https://gist.github.com/fourohfour/8243657
+		double closestDistance = Double.MAX_VALUE;
+		Player closestPlayer = null;
+		for (Player player : Bukkit.getOnlinePlayers()) {
+			double distance = player.getLocation().distance(location);
+			if (closestDistance == Double.MAX_VALUE || distance < closestDistance) {
+				closestDistance = distance;
+				closestPlayer = player;
+			}
+		}
+
+		return closestPlayer;
 	}
 }

@@ -4,6 +4,7 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -11,9 +12,11 @@ import org.bukkit.event.block.BlockFromToEvent;
 
 public class WaterFlowListener implements Listener {
     private final NetherWater plugin;
+    private final ConfigManager configManager;
 
     public WaterFlowListener(NetherWater plugin) {
         this.plugin = plugin;
+        this.configManager = plugin.getConfigManager();
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -29,6 +32,13 @@ public class WaterFlowListener implements Listener {
         this.plugin.dump("- Source metadata: " + source.getBlockData().getAsString(true));
         this.plugin.dump("- New block metadata: " + destination.getBlockData().getAsString(true));
         this.plugin.dump("- Face: " + face.name());
+
+        if (this.configManager.isSpreadBypassEnabled()) {
+            Player player = this.plugin.getClosestPlayer(event.getToBlock().getLocation());
+            if (player.hasPermission("netherwater.spread.bypass")) {
+                return;
+            }
+        }
 
         if (source.getWorld().getEnvironment() != World.Environment.NETHER) {
             return;

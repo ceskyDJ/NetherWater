@@ -32,3 +32,6 @@ permissions:
   netherwater.reload:
     description: Allows players to reload the configuration
     default: op
+  netherwater.spread.bypass:
+    description: Turn off spread limits for players with this permission. Requires allow this feature in config!
+    default: op

@@ -7,6 +7,8 @@ disabled-worlds:
 max-height: 999
 # Min world height (Y coordinate) to use plugin features
 min-height: 0
+# Spread limits bypass for OP players or players with netherwater.spread.bypass permission
+spread-bypass: false
 # Messages for translation
 # Change only text in quotation marks ("")!
 # If you need to use quotation mark in your text, use \" instead

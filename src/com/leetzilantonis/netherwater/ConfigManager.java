@@ -47,4 +47,8 @@ public class ConfigManager {
     public int getMaxHeight() {
         return this.plugin.getConfig().getInt("max-height");
     }
+
+    public boolean isSpreadBypassEnabled() {
+        return this.plugin.getConfig().getBoolean("spread-bypass");
+    }
 }
