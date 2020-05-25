@@ -57,6 +57,56 @@ public class WaterFlowListener implements Listener {
 
         if (waterLevel == 8 && face == BlockFace.DOWN) {
             event.setCancelled(true);
+            return;
         }
+
+        if (waterLevel != 0 && !isWatterNearby(source)) {
+            event.setCancelled(true);
+            return;
+        }
+
+        if (waterLevel > 3) {
+            event.setCancelled(true);
+            return;
+        }
+
+        if (this.isOnlyAirOverAndUnder(source)) {
+            event.setCancelled(true);
+        }
+    }
+
+    private boolean isWatterNearby(Block block) {
+        BlockFace[] faces = {BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST, BlockFace.UP};
+
+        for (BlockFace face : faces) {
+            Block testedBlock = block.getRelative(face, 1);
+            if (testedBlock.getType() == Material.WATER) {
+                int waterLevel = Integer.parseInt(String.valueOf(testedBlock.getBlockData().getAsString().charAt(22)));
+
+                if (waterLevel != 8 && waterLevel != 1) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private boolean isOnlyAirOverAndUnder(Block block) {
+        for (int i = 1; i < 5; i++) {
+            Block relativeBlock = block.getRelative(BlockFace.UP, i);
+            if (relativeBlock.getType() != Material.AIR && relativeBlock.getType() != Material.WATER) {
+                return false;
+            }
+        }
+
+        for (int i = 1; i < 5; i++) {
+            Block relativeBlock = block.getRelative(BlockFace.DOWN, i);
+            if (relativeBlock.getType() != Material.AIR && relativeBlock.getType() != Material.WATER) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }
