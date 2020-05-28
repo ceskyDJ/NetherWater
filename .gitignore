@@ -1,0 +1,8 @@
+# IDEA project files
+.idea/
+
+# Java module config
+NetherWater.iml
+
+# Build files
+out/
