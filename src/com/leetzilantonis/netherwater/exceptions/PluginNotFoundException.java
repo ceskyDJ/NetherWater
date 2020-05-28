@@ -1,4 +1,4 @@
-package com.leetzilantonis.netherwater;
+package com.leetzilantonis.netherwater.exceptions;
 
 public class PluginNotFoundException extends Exception {
     public PluginNotFoundException() {

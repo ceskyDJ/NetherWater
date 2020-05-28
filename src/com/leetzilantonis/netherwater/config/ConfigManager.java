@@ -1,4 +1,6 @@
-package com.leetzilantonis.netherwater;
+package com.leetzilantonis.netherwater.config;
+
+import com.leetzilantonis.netherwater.NetherWater;
 
 import java.io.File;
 import java.util.List;

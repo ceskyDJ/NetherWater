@@ -1,5 +1,7 @@
-package com.leetzilantonis.netherwater;
+package com.leetzilantonis.netherwater.listeners;
 
+import com.leetzilantonis.netherwater.NetherWater;
+import com.leetzilantonis.netherwater.config.ConfigManager;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
