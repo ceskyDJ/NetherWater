@@ -1,18 +1,18 @@
 # NetherWater
-Simple Spigot plugin that allows players to use water buckets and ice blocks in nether worlds.
+Simple [Spigot plugin](https://www.spigotmc.org/resources/nether-water-enable-water-in-nether-worlds.79256/) that allows players to use water buckets and ice blocks in nether worlds.
 
 This is a fork of [KlutzyBubbles/NetherWater](https://github.com/KlutzyBubbles/NetherWater) repository.
 
 ## Commands
-- /nwreload or /nwr - reload plugin configuration
+- **/nwreload** or **/nwr** - reload plugin configuration
 
 ## Permissions
-- netherwater.use.WORLD - using plugin features in some world
-- netherwater.use.* - using plugin features in all worlds
-- netherwater.world.bypass - turn on plugin features in disabled worlds for some players
-- netherwater.spread.bypass - disable spread limits for some players - **needs to allow this feature in config file!**
-- netherwater.reload - use /nwreload (or /nwr) command
-- netherwater.* - every permissions of this plugin
+- **netherwater.use.WORLD** - using plugin features in some world
+- **netherwater.use.*** - using plugin features in all worlds
+- **netherwater.world.bypass** - turn on plugin features in disabled worlds for some players
+- **netherwater.spread.bypass** - disable spread limits for some players - **needs to allow this feature in config file!**
+- **netherwater.reload** - use /nwreload (or /nwr) command
+- **netherwater.*** - every permissions of this plugin
 
 ## Download and installation
 1. Go to the latest release page and download the JAR file https://github.com/ceskyDJ/NetherWater/releases/latest.
