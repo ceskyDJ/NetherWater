@@ -38,7 +38,7 @@ public class NetherWater extends JavaPlugin {
 			this.getLogger().info("World Guard has been found and registered!");
 		} catch (PluginNotFoundException e) {
 			this.worldGuard = null;
-			this.getLogger().warning("World Guard cannot be found.");
+			this.colorMessage("World Guard cannot be found.", ChatColor.YELLOW);
 		}
 
 		this.getServer().getPluginManager().registerEvents(new WaterPlaceListener(this), this);
@@ -46,7 +46,7 @@ public class NetherWater extends JavaPlugin {
 		this.getServer().getPluginManager().registerEvents(new WaterFlowListener(this), this);
 		this.getCommand("nwreload").setExecutor(new NWReloadCommand(this));
 
-		this.getLogger().info("Plugin loaded successfully");
+		this.colorMessage("Plugin loaded successfully", ChatColor.GREEN);
 
 		this.getLogger().info("Checking for updates...");
 		this.checkForUpdates();
@@ -71,9 +71,13 @@ public class NetherWater extends JavaPlugin {
 		return this.configManager;
 	}
 
+	public void colorMessage(String message, ChatColor color) {
+		this.getServer().getConsoleSender().sendMessage("[NetherWater] " + color + message);
+	}
+
 	public void dump(String message) {
 		if (this.configManager.isDebugOn()) {
-			this.getServer().getConsoleSender().sendMessage(ChatColor.YELLOW + "[NetherWater] " + message);
+			this.colorMessage(message, ChatColor.YELLOW);
 		}
 	}
 
@@ -146,16 +150,16 @@ public class NetherWater extends JavaPlugin {
 				.handleResponse((versionResponse, version) -> {
 					switch (versionResponse) {
 						case FOUND_NEW:
-							this.getLogger().warning(ChatColor.YELLOW + "Updater has found a new version " + version + "!");
-							this.getLogger().warning(ChatColor.YELLOW + "You should update the plugin.");
-							this.getLogger().warning(ChatColor.YELLOW + "See: https://www.spigotmc.org/resources/nether-water-enable-water-in-nether-worlds.79256/");
+							this.colorMessage("Updater has found a new version " + version + "!", ChatColor.YELLOW);
+							this.colorMessage("You should update the plugin.", ChatColor.YELLOW);
+							this.colorMessage("See: https://www.spigotmc.org/resources/nether-water-enable-water-in-nether-worlds.79256/", ChatColor.YELLOW);
 							break;
 						case LATEST:
-							this.getLogger().info("You have the newest version of the plugin.");
+							this.colorMessage("You have the newest version of the plugin.", ChatColor.GREEN);
 							break;
 						case UNAVAILABLE:
 						default:
-							this.getLogger().warning(ChatColor.RED + "Update check has't been successful.");
+							this.colorMessage("Update check has't been successful.", ChatColor.RED);
 							break;
 					}
 				}).check();
