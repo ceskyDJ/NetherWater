@@ -16,6 +16,15 @@ This is a fork of [KlutzyBubbles/NetherWater](https://github.com/KlutzyBubbles/N
 
 ## Default configuration
 ```YAML
+#--------------------------------------------------------------------------------------------
+#     _   _          _     _                      __        __          _
+#    | \ | |   ___  | |_  | |__     ___   _ __    \ \      / /   __ _  | |_    ___   _ __
+#    |  \| |  / _ \ | __| | '_ \   / _ \ | '__|    \ \ /\ / /   / _` | | __|  / _ \ | '__|
+#    | |\  | |  __/ | |_  | | | | |  __/ | |        \ V  V /   | (_| | | |_  |  __/ | |
+#    |_| \_|  \___|  \__| |_| |_|  \___| |_|         \_/\_/     \__,_|  \__|  \___| |_|
+#
+#--------------------------------------------------------------------------------------------
+
 # Allow using debug dumps. It's not recommended on production servers.
 debug: false
 # Worlds where the plugin is disabled
@@ -25,6 +34,10 @@ disabled-worlds:
 max-height: 999
 # Min world height (Y coordinate) to use plugin features
 min-height: 0
+# You can disable water spread behaviour by setting this to false
+# OP players and others with netherwater.spread.bypass permission still can have normal water spread
+# To setup this change spread-bypass to true and eventually add netherwater.spread.bypass permission for target players
+spread-enabled: true
 # Spread limits bypass for OP players or players with netherwater.spread.bypass permission
 spread-bypass: false
 # Messages for translation
