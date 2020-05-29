@@ -3,6 +3,7 @@ package com.leetzilantonis.netherwater.updater;
 import com.google.common.base.Preconditions;
 import com.google.common.io.Resources;
 import com.google.common.net.HttpHeaders;
+import com.leetzilantonis.netherwater.NetherWater;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -12,6 +13,7 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.function.BiConsumer;
 
@@ -66,7 +68,7 @@ public class UpdateChecker {
 
                 String fetchedVersion = Resources.toString(httpURLConnection.getURL(), Charset.defaultCharset());
 
-                boolean latestVersion = fetchedVersion.equalsIgnoreCase(this.currentVersion);
+                boolean latestVersion = this.isLatestVersion(fetchedVersion);
 
                 Bukkit.getScheduler().runTask(this.javaPlugin, () -> this.versionResponse.accept(latestVersion ? VersionResponse.LATEST : VersionResponse.FOUND_NEW, latestVersion ? this.currentVersion : fetchedVersion));
             } catch (IOException exception) {
@@ -74,5 +76,29 @@ public class UpdateChecker {
                 Bukkit.getScheduler().runTask(this.javaPlugin, () -> this.versionResponse.accept(VersionResponse.UNAVAILABLE, null));
             }
         });
+    }
+
+    private boolean isLatestVersion(String fetchedVersion) {
+        String[] fetchedVersionParts = fetchedVersion.split("\\.");
+        String[] currentVersionParts = this.currentVersion.split("\\.");
+
+        for (int i = 0; i < fetchedVersionParts.length; i++) {
+            int fetched = Integer.parseInt(fetchedVersionParts[i]);
+            int current;
+
+            if (fetchedVersionParts.length > currentVersionParts.length && i > (currentVersionParts.length - 1)) {
+                current = 0;
+            } else {
+                current = Integer.parseInt(currentVersionParts[i]);
+            }
+
+            if (fetched > current) {
+                return false;
+            } else if(fetched < current) {
+                return true;
+            }
+        }
+
+        return true;
     }
 }
