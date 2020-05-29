@@ -6,6 +6,7 @@ import com.leetzilantonis.netherwater.exceptions.PluginNotFoundException;
 import com.leetzilantonis.netherwater.listeners.BlockBreakListener;
 import com.leetzilantonis.netherwater.listeners.WaterFlowListener;
 import com.leetzilantonis.netherwater.listeners.WaterPlaceListener;
+import com.leetzilantonis.netherwater.updater.UpdateChecker;
 import com.sk89q.worldedit.util.Location;
 import com.sk89q.worldedit.world.World;
 import com.sk89q.worldguard.LocalPlayer;
@@ -15,6 +16,7 @@ import com.sk89q.worldguard.protection.regions.RegionContainer;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Color;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -45,6 +47,9 @@ public class NetherWater extends JavaPlugin {
 		this.getCommand("nwreload").setExecutor(new NWReloadCommand(this));
 
 		this.getLogger().info("Plugin loaded successfully");
+
+		this.getLogger().info("Checking for updates...");
+		this.checkForUpdates();
 	}
 
 	@Override
@@ -132,5 +137,27 @@ public class NetherWater extends JavaPlugin {
 		}
 
 		return closestPlayer;
+	}
+
+	private void checkForUpdates() {
+		UpdateChecker
+				.of(this)
+				.resourceId(79256)
+				.handleResponse((versionResponse, version) -> {
+					switch (versionResponse) {
+						case FOUND_NEW:
+							this.getLogger().warning(ChatColor.YELLOW + "Updater has found a new version " + version + "!");
+							this.getLogger().warning(ChatColor.YELLOW + "You should update the plugin.");
+							this.getLogger().warning(ChatColor.YELLOW + "See: https://www.spigotmc.org/resources/nether-water-enable-water-in-nether-worlds.79256/");
+							break;
+						case LATEST:
+							this.getLogger().info("You have the newest version of the plugin.");
+							break;
+						case UNAVAILABLE:
+						default:
+							this.getLogger().warning(ChatColor.RED + "Update check has't been successful.");
+							break;
+					}
+				}).check();
 	}
 }
