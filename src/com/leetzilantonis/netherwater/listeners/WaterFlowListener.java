@@ -11,6 +11,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockFromToEvent;
+import org.bukkit.event.block.FluidLevelChangeEvent;
 
 public class WaterFlowListener implements Listener {
     private final NetherWater plugin;
@@ -47,6 +48,11 @@ public class WaterFlowListener implements Listener {
         }
 
         if (source.getType() != Material.WATER || destination.getType() != Material.AIR) {
+            return;
+        }
+
+        if (!this.configManager.isSpreadEnabled()) {
+            event.setCancelled(true);
             return;
         }
 

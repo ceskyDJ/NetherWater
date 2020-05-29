@@ -53,4 +53,8 @@ public class ConfigManager {
     public boolean isSpreadBypassEnabled() {
         return this.plugin.getConfig().getBoolean("spread-bypass");
     }
+
+    public boolean isSpreadEnabled() {
+        return this.plugin.getConfig().getBoolean("spread-enabled");
+    }
 }
