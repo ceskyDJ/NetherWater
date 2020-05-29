@@ -54,7 +54,7 @@ public class NetherWater extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
-		this.saveConfig();
+		this.getLogger().info("Plugin disabled successfully");
 	}
 
 	private WorldGuardPlugin getWorldGuard() throws PluginNotFoundException {

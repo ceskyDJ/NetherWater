@@ -21,7 +21,7 @@ public class NWReloadCommand implements CommandExecutor {
 		if (!sender.hasPermission("netherwater.reload")) {
 			sender.sendMessage(ChatColor.RED + this.configManager.getMessage("permissions"));
 		} else {
-			this.configManager.reloadConfig();
+			this.configManager.loadConfig();
 			sender.sendMessage(ChatColor.GREEN + this.configManager.getMessage("config-reload"));
 		}
 
