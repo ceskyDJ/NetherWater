@@ -20,7 +20,7 @@ This is a fork of [KlutzyBubbles/NetherWater](https://github.com/KlutzyBubbles/N
 3. Restart your server.
 4. You are done! Now you can change configuration of the plugin in plugins/NetherWater directory. If there is some problem, you can insert there default configuration from this page or create an issue.
 
-If you don't want to find the JAR, here's the direct link: [NetherWater-1.0.8.jar](https://github.com/ceskyDJ/NetherWater/releases/download/v1.0.8/NetherWater-1.0.8.jar)
+If you don't want to find the JAR, here's the direct link: [NetherWater-1.0.8.1.jar](https://github.com/ceskyDJ/NetherWater/releases/download/v1.0.8.1/NetherWater-1.0.8.1.jar)
 
 ## Default configuration
 ```YAML
