@@ -43,7 +43,12 @@ public class WaterFlowListener implements Listener {
             }
         }
 
-        if (source.getWorld().getEnvironment() != World.Environment.NETHER) {
+        World world = source.getWorld();
+        if (world.getEnvironment() != World.Environment.NETHER) {
+            return;
+        }
+
+        if (this.configManager.getDisabledWorlds().contains(world.getName())) {
             return;
         }
 
