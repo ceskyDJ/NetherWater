@@ -1,9 +1,8 @@
-package com.leetzilantonis.netherwater.updater;
+package cz.ceskydj.netherwater.updater;
 
 import com.google.common.base.Preconditions;
 import com.google.common.io.Resources;
 import com.google.common.net.HttpHeaders;
-import com.leetzilantonis.netherwater.NetherWater;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -13,7 +12,6 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.Charset;
-import java.util.Arrays;
 import java.util.Objects;
 import java.util.function.BiConsumer;
 

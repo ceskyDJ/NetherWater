@@ -1,12 +1,12 @@
-package com.leetzilantonis.netherwater;
+package cz.ceskydj.netherwater;
 
-import com.leetzilantonis.netherwater.commands.NWReloadCommand;
-import com.leetzilantonis.netherwater.config.ConfigManager;
-import com.leetzilantonis.netherwater.exceptions.PluginNotFoundException;
-import com.leetzilantonis.netherwater.listeners.BlockBreakListener;
-import com.leetzilantonis.netherwater.listeners.WaterFlowListener;
-import com.leetzilantonis.netherwater.listeners.WaterPlaceListener;
-import com.leetzilantonis.netherwater.updater.UpdateChecker;
+import cz.ceskydj.netherwater.commands.NWReloadCommand;
+import cz.ceskydj.netherwater.config.ConfigManager;
+import cz.ceskydj.netherwater.exceptions.PluginNotFoundException;
+import cz.ceskydj.netherwater.listeners.BlockBreakListener;
+import cz.ceskydj.netherwater.listeners.WaterFlowListener;
+import cz.ceskydj.netherwater.listeners.WaterPlaceListener;
+import cz.ceskydj.netherwater.updater.UpdateChecker;
 import com.sk89q.worldedit.util.Location;
 import com.sk89q.worldedit.world.World;
 import com.sk89q.worldguard.LocalPlayer;
@@ -16,7 +16,6 @@ import com.sk89q.worldguard.protection.regions.RegionContainer;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Color;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;

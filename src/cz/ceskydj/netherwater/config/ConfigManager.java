@@ -1,7 +1,6 @@
-package com.leetzilantonis.netherwater.config;
+package cz.ceskydj.netherwater.config;
 
-import com.leetzilantonis.netherwater.NetherWater;
-import org.bukkit.ChatColor;
+import cz.ceskydj.netherwater.NetherWater;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 

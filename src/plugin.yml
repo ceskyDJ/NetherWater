@@ -1,11 +1,11 @@
 name: NetherWater
 version: 1.0.10.1
 description: Allow players to use water in the nether
-authors: [Lee Tzilantonis, ceskyDJ]
+author: ceskyDJ
 
-main: com.leetzilantonis.netherwater.NetherWater
+main: cz.ceskydj.netherwater.NetherWater
 database: false
-api-version: 1.15
+api-version: "1.15"
 softdepend:
   - WorldEdit
   - WorldGuard

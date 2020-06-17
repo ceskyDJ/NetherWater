@@ -1,4 +1,4 @@
-package com.leetzilantonis.netherwater.exceptions;
+package cz.ceskydj.netherwater.exceptions;
 
 public class PluginNotFoundException extends Exception {
     public PluginNotFoundException() {

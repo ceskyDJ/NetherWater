@@ -1,4 +1,4 @@
-package com.leetzilantonis.netherwater.updater;
+package cz.ceskydj.netherwater.updater;
 
 /**
  * @author slees

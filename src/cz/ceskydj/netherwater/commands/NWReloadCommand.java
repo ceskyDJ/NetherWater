@@ -1,7 +1,7 @@
-package com.leetzilantonis.netherwater.commands;
+package cz.ceskydj.netherwater.commands;
 
-import com.leetzilantonis.netherwater.NetherWater;
-import com.leetzilantonis.netherwater.config.ConfigManager;
+import cz.ceskydj.netherwater.NetherWater;
+import cz.ceskydj.netherwater.config.ConfigManager;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

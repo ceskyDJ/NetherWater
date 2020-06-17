@@ -1,6 +1,6 @@
-package com.leetzilantonis.netherwater.listeners;
+package cz.ceskydj.netherwater.listeners;
 
-import com.leetzilantonis.netherwater.NetherWater;
+import cz.ceskydj.netherwater.NetherWater;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.Block;

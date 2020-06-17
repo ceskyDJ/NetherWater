@@ -1,7 +1,7 @@
-package com.leetzilantonis.netherwater.listeners;
+package cz.ceskydj.netherwater.listeners;
 
-import com.leetzilantonis.netherwater.NetherWater;
-import com.leetzilantonis.netherwater.config.ConfigManager;
+import cz.ceskydj.netherwater.NetherWater;
+import cz.ceskydj.netherwater.config.ConfigManager;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -11,7 +11,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockFromToEvent;
-import org.bukkit.event.block.FluidLevelChangeEvent;
 
 public class WaterFlowListener implements Listener {
     private final NetherWater plugin;
