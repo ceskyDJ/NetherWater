@@ -32,17 +32,12 @@ public class WaterPlaceListener implements Listener {
 			return;
 		}
 
-		if (event.getItem() == null) {
+		if (event.getItem() == null || event.getItem().getType() != Material.WATER_BUCKET) {
 			return;
 		}
 
 		Player player = event.getPlayer();
 		Block selectedBlock = event.getClickedBlock().getRelative(event.getBlockFace());
-
-		if (event.getItem() == null || event.getItem().getType() != Material.WATER_BUCKET) {
-			return;
-		}
-
 		// Check general conditions for using this plugin (world type, player permissions, world height etc.)
 		if (!this.plugin.canBeUsedThisPlugin(player, selectedBlock)) {
 			return;
@@ -51,7 +46,7 @@ public class WaterPlaceListener implements Listener {
 		// Cancel native event actions
 		event.setCancelled(true);
 
-		// Add watter block
+		// Add water block
 		event.getClickedBlock().getRelative(event.getBlockFace()).setType(Material.WATER);
 
 		// Replace water bucket with empty one

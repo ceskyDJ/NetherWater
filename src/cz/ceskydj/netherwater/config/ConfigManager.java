@@ -59,4 +59,8 @@ public class ConfigManager {
     public boolean isSpreadEnabled() {
         return this.configData.getBoolean("spread-enabled");
     }
+
+    public boolean isScoopingDisabled() {
+        return !this.configData.getBoolean("scooping-into-buckets");
+    }
 }

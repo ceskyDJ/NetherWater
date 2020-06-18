@@ -17,21 +17,26 @@ commands:
     usage: /nwreload or /nwr
 
 permissions:
-  netherwater.use.*:
-    description: Allows players to use water in all non disabled nether worlds
-    default: op
   netherwater.*:
     description: Allows use of every feature in the plugin
     children:
       netherwater.use.*: true
       netherwater.world.bypass: true
       netherwater.reload: true
-  netherwater.world.bypass:
-    description: Allows players to bypass the disabled worlds and place water
-    default: op
   netherwater.reload:
     description: Allows players to reload the configuration
     default: op
+#  netherwater.use.WORLD:
+#    description: Allows players to use water in specific non disabled world
+  netherwater.use.*:
+    description: Allows players to use water in all non disabled nether worlds
+    default: op
+  netherwater.world.bypass:
+    description: Allows players to bypass the disabled worlds and place water
+    default: op
   netherwater.spread.bypass:
     description: Turn off spread limits for players with this permission. Requires allow this feature in config!
-    default: op
+    default: false
+  netherwater.scooping.bypass:
+    description: Allows players to scoop water into bucket
+    default: false

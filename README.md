@@ -11,6 +11,7 @@ This is a fork of [KlutzyBubbles/NetherWater](https://github.com/KlutzyBubbles/N
 - **netherwater.use.*** - using plugin features in all worlds
 - **netherwater.world.bypass** - turn on plugin features in disabled worlds for some players
 - **netherwater.spread.bypass** - disable spread limits for some players - **needs to allow this feature in config file!**
+- **netherwater.scooping.bypass** - allow scooping water into bucket for some players
 - **netherwater.reload** - use /nwreload (or /nwr) command
 - **netherwater.*** - every permissions of this plugin
 
@@ -40,6 +41,8 @@ min-height: 0
 spread-enabled: true
 # Spread limits bypass for OP players or players with netherwater.spread.bypass permission
 spread-bypass: false
+# Scoping water into buckets is disabled by default
+scooping-into-buckets: false
 # Messages for translation
 # Change only text in quotation marks ("")!
 # If you need to use quotation mark in your text, use \" instead

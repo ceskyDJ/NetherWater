@@ -3,9 +3,7 @@ package cz.ceskydj.netherwater;
 import cz.ceskydj.netherwater.commands.NWReloadCommand;
 import cz.ceskydj.netherwater.config.ConfigManager;
 import cz.ceskydj.netherwater.exceptions.PluginNotFoundException;
-import cz.ceskydj.netherwater.listeners.BlockBreakListener;
-import cz.ceskydj.netherwater.listeners.WaterFlowListener;
-import cz.ceskydj.netherwater.listeners.WaterPlaceListener;
+import cz.ceskydj.netherwater.listeners.*;
 import cz.ceskydj.netherwater.updater.UpdateChecker;
 import com.sk89q.worldedit.util.Location;
 import com.sk89q.worldedit.world.World;
@@ -43,6 +41,7 @@ public class NetherWater extends JavaPlugin {
 		this.getServer().getPluginManager().registerEvents(new WaterPlaceListener(this), this);
 		this.getServer().getPluginManager().registerEvents(new BlockBreakListener(this), this);
 		this.getServer().getPluginManager().registerEvents(new WaterFlowListener(this), this);
+		this.getServer().getPluginManager().registerEvents(new WaterScoopListener(this), this);
 		this.getCommand("nwreload").setExecutor(new NWReloadCommand(this));
 
 		this.colorMessage("Plugin loaded successfully", ChatColor.GREEN);
