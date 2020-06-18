@@ -42,6 +42,7 @@ public class NetherWater extends JavaPlugin {
 		this.getServer().getPluginManager().registerEvents(new BlockBreakListener(this), this);
 		this.getServer().getPluginManager().registerEvents(new WaterFlowListener(this), this);
 		this.getServer().getPluginManager().registerEvents(new WaterScoopListener(this), this);
+		this.getServer().getPluginManager().registerEvents(new WaterCreateListener(this), this);
 		this.getCommand("nwreload").setExecutor(new NWReloadCommand(this));
 
 		this.colorMessage("Plugin loaded successfully", ChatColor.GREEN);

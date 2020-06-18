@@ -24,6 +24,8 @@ spread-enabled: true
 spread-bypass: false
 # Scoping water into buckets is disabled by default
 scooping-into-buckets: false
+# Infinite sources of water is disabled by default
+infinite-sources: false
 # Messages for translation
 # Change only text in quotation marks ("")!
 # If you need to use quotation mark in your text, use \" instead

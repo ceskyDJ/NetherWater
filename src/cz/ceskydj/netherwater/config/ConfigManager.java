@@ -63,4 +63,8 @@ public class ConfigManager {
     public boolean isScoopingDisabled() {
         return !this.configData.getBoolean("scooping-into-buckets");
     }
+
+    public boolean areInfiniteSourcesDisabled() {
+        return !this.configData.getBoolean("infinite-sources");
+    }
 }
