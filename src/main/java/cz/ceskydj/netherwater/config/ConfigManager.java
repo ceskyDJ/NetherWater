@@ -1,8 +1,7 @@
 package cz.ceskydj.netherwater.config;
 
 import cz.ceskydj.netherwater.NetherWater;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
+import de.leonhard.storage.Yaml;
 
 import java.io.File;
 import java.util.List;
@@ -10,7 +9,7 @@ import java.util.List;
 public class ConfigManager {
     private final NetherWater plugin;
 
-    private FileConfiguration configData;
+    private Yaml configData;
 
     public ConfigManager(NetherWater plugin) {
         this.plugin = plugin;
@@ -18,7 +17,7 @@ public class ConfigManager {
         this.loadConfig();
     }
 
-    public void loadConfig() {
+    private void loadConfig() {
         if (!this.plugin.getDataFolder().exists()) {
             this.plugin.getDataFolder().mkdir();
         }
@@ -28,7 +27,7 @@ public class ConfigManager {
         if (!configFile.exists()) {
             this.plugin.saveResource("config.yml", false);
         } else {
-            this.configData = YamlConfiguration.loadConfiguration(configFile);
+            this.configData = new Yaml(new File(this.plugin.getDataFolder(), "config.yml"));
         }
     }
 
