@@ -5,4 +5,4 @@
 NetherWater.iml
 
 # Build files
-out/
+target/
