@@ -19,7 +19,7 @@ public class BlockBreakListener implements Listener {
         this.plugin = plugin;
     }
 
-    @EventHandler (priority = EventPriority.MONITOR, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onBlockBreak(BlockBreakEvent event) {
         this.plugin.dump("Block break event has been handled.");
         this.plugin.dump("- World: " + Objects.requireNonNull(event.getBlock()).getWorld().getName() + " (type: " + event.getBlock().getWorld().getEnvironment() + ")");

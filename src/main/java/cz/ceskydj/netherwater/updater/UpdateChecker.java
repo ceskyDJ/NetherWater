@@ -92,7 +92,7 @@ public class UpdateChecker {
 
             if (fetched > current) {
                 return false;
-            } else if(fetched < current) {
+            } else if (fetched < current) {
                 return true;
             }
         }
