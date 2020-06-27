@@ -1,6 +1,5 @@
 package cz.ceskydj.netherwater.updater;
 
-import com.google.common.base.Preconditions;
 import com.google.common.io.Resources;
 import com.google.common.net.HttpHeaders;
 import org.bukkit.Bukkit;
@@ -24,8 +23,8 @@ public class UpdateChecker {
 
     private final JavaPlugin javaPlugin;
 
-    private String currentVersion;
-    private int resourceId = -1;
+    private final String currentVersion;
+    private final int resourceId = 79256;
     private BiConsumer<VersionResponse, String> versionResponse;
 
     private UpdateChecker(@Nonnull JavaPlugin javaPlugin) {
@@ -37,16 +36,6 @@ public class UpdateChecker {
         return new UpdateChecker(javaPlugin);
     }
 
-    public UpdateChecker currentVersion(@Nonnull String currentVersion) {
-        this.currentVersion = currentVersion;
-        return this;
-    }
-
-    public UpdateChecker resourceId(int resourceId) {
-        this.resourceId = resourceId;
-        return this;
-    }
-
     public UpdateChecker handleResponse(@Nonnull BiConsumer<VersionResponse, String> versionResponse) {
         this.versionResponse = versionResponse;
         return this;
@@ -55,7 +44,6 @@ public class UpdateChecker {
     public void check() {
         Objects.requireNonNull(this.javaPlugin, "javaPlugin");
         Objects.requireNonNull(this.currentVersion, "currentVersion");
-        Preconditions.checkState(this.resourceId != -1, "resource id not set");
         Objects.requireNonNull(this.versionResponse, "versionResponse");
 
         Bukkit.getScheduler().runTaskAsynchronously(this.javaPlugin, () -> {

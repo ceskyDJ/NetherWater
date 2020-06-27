@@ -1,7 +1,8 @@
 package cz.ceskydj.netherwater.listeners;
 
 import cz.ceskydj.netherwater.NetherWater;
-import cz.ceskydj.netherwater.config.ConfigManager;
+import cz.ceskydj.netherwater.managers.ConfigManager;
+import cz.ceskydj.netherwater.managers.MessageManager;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -15,10 +16,13 @@ import org.bukkit.event.block.BlockFromToEvent;
 public class WaterFlowListener implements Listener {
     private final NetherWater plugin;
     private final ConfigManager configManager;
+    private final MessageManager messageManager;
 
     public WaterFlowListener(NetherWater plugin) {
         this.plugin = plugin;
+
         this.configManager = plugin.getConfigManager();
+        this.messageManager = plugin.getMessageManager();
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -27,13 +31,13 @@ public class WaterFlowListener implements Listener {
         Block destination = event.getToBlock();
         BlockFace face = event.getFace();
 
-        this.plugin.dump("Block from to event has been handled.");
-        this.plugin.dump("- World: " + source.getWorld().getName());
-        this.plugin.dump("- Source block: " + source.getType().name());
-        this.plugin.dump("- New block: " + destination.getType().name());
-        this.plugin.dump("- Source metadata: " + source.getBlockData().getAsString(true));
-        this.plugin.dump("- New block metadata: " + destination.getBlockData().getAsString(true));
-        this.plugin.dump("- Face: " + face.name());
+        this.messageManager.dump("Block from to event has been handled.");
+        this.messageManager.dump("- World: " + source.getWorld().getName());
+        this.messageManager.dump("- Source block: " + source.getType().name());
+        this.messageManager.dump("- New block: " + destination.getType().name());
+        this.messageManager.dump("- Source metadata: " + source.getBlockData().getAsString(true));
+        this.messageManager.dump("- New block metadata: " + destination.getBlockData().getAsString(true));
+        this.messageManager.dump("- Face: " + face.name());
 
         if (this.configManager.isSpreadBypassEnabled()) {
             Player player = this.plugin.getClosestPlayer(event.getToBlock().getLocation());

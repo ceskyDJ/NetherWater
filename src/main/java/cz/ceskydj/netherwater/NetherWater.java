@@ -8,10 +8,12 @@ import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.protection.flags.Flags;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
-import cz.ceskydj.netherwater.commands.NWReloadCommand;
-import cz.ceskydj.netherwater.config.ConfigManager;
+import cz.ceskydj.netherwater.commands.BaseCommand;
 import cz.ceskydj.netherwater.exceptions.PluginNotFoundException;
 import cz.ceskydj.netherwater.listeners.*;
+import cz.ceskydj.netherwater.managers.ConfigManager;
+import cz.ceskydj.netherwater.managers.ConfigManipulator;
+import cz.ceskydj.netherwater.managers.MessageManager;
 import cz.ceskydj.netherwater.updater.UpdateChecker;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -24,17 +26,20 @@ public class NetherWater extends JavaPlugin {
     private WorldGuardPlugin worldGuard = null;
 
     private ConfigManager configManager;
+    private MessageManager messageManager;
 
     @Override
     public void onEnable() {
-        this.configManager = new ConfigManager(this);
+        ConfigManipulator configManipulator = new ConfigManipulator(this);
+        this.configManager = new ConfigManager(configManipulator);
+        this.messageManager = new MessageManager(this);
 
         try {
             this.worldGuard = this.getWorldGuard();
-            this.getLogger().info("World Guard has been found and registered!");
+            this.messageManager.consoleMessage("World Guard has been found and registered!", ChatColor.GREEN);
         } catch (PluginNotFoundException e) {
             this.worldGuard = null;
-            this.colorMessage("World Guard hasn't been found.", ChatColor.YELLOW);
+            this.messageManager.consoleMessage("World Guard hasn't been found.");
         }
 
         this.getServer().getPluginManager().registerEvents(new WaterPlaceListener(this), this);
@@ -42,17 +47,19 @@ public class NetherWater extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new WaterFlowListener(this), this);
         this.getServer().getPluginManager().registerEvents(new WaterScoopListener(this), this);
         this.getServer().getPluginManager().registerEvents(new WaterCreateListener(this), this);
-        this.getCommand("nwreload").setExecutor(new NWReloadCommand(this));
 
-        this.colorMessage("Plugin loaded successfully", ChatColor.GREEN);
+        this.getCommand("netherwater").setExecutor(new BaseCommand(this));
+        this.getCommand("netherwater").setTabCompleter(new BaseCommand(this));
 
-        this.getLogger().info("Checking for updates...");
+        this.messageManager.consoleMessage("Plugin loaded successfully", ChatColor.GREEN);
+
+        this.messageManager.consoleMessage("Checking for updates...");
         this.checkForUpdates();
     }
 
     @Override
     public void onDisable() {
-        this.getLogger().info("Plugin has been disabled successfully");
+        this.messageManager.consoleMessage("Plugin has been disabled successfully");
     }
 
     private WorldGuardPlugin getWorldGuard() throws PluginNotFoundException {
@@ -69,14 +76,8 @@ public class NetherWater extends JavaPlugin {
         return this.configManager;
     }
 
-    public void colorMessage(String message, ChatColor color) {
-        this.getServer().getConsoleSender().sendMessage("[NetherWater] " + color + message);
-    }
-
-    public void dump(String message) {
-        if (this.configManager.isDebugOn()) {
-            this.colorMessage(message, ChatColor.YELLOW);
-        }
+    public MessageManager getMessageManager() {
+        return this.messageManager;
     }
 
     public boolean canBuild(Player player, Block block) {
@@ -113,6 +114,8 @@ public class NetherWater extends JavaPlugin {
         }
 
         if (!this.canBuild(player, block)) {
+            this.messageManager.sendMessage(player, "permissions");
+
             return false;
         }
 
@@ -142,20 +145,19 @@ public class NetherWater extends JavaPlugin {
     private void checkForUpdates() {
         UpdateChecker
                 .of(this)
-                .resourceId(79256)
                 .handleResponse((versionResponse, version) -> {
                     switch (versionResponse) {
                         case FOUND_NEW:
-                            this.colorMessage("Updater has found a new version " + version + "!", ChatColor.YELLOW);
-                            this.colorMessage("You should update the plugin.", ChatColor.YELLOW);
-                            this.colorMessage("See: https://www.spigotmc.org/resources/nether-water-enable-water-in-nether-worlds.79256/", ChatColor.YELLOW);
+                            this.messageManager.consoleMessage("Updater has found a new version " + version + "!", ChatColor.YELLOW);
+                            this.messageManager.consoleMessage("You should update the plugin.", ChatColor.YELLOW);
+                            this.messageManager.consoleMessage("See: https://www.spigotmc.org/resources/nether-water-enable-water-in-nether-worlds.79256/", ChatColor.YELLOW);
                             break;
                         case LATEST:
-                            this.colorMessage("You have the newest version of the plugin.", ChatColor.GREEN);
+                            this.messageManager.consoleMessage("You have the newest version of the plugin.", ChatColor.GREEN);
                             break;
                         case UNAVAILABLE:
                         default:
-                            this.colorMessage("Update check has't been successful.", ChatColor.RED);
+                            this.messageManager.consoleMessage("Update check has't been successful.", ChatColor.RED);
                             break;
                     }
                 }).check();

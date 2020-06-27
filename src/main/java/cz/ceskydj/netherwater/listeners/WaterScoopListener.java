@@ -1,7 +1,8 @@
 package cz.ceskydj.netherwater.listeners;
 
 import cz.ceskydj.netherwater.NetherWater;
-import cz.ceskydj.netherwater.config.ConfigManager;
+import cz.ceskydj.netherwater.managers.ConfigManager;
+import cz.ceskydj.netherwater.managers.MessageManager;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.Levelled;
@@ -15,10 +16,13 @@ import org.bukkit.event.player.PlayerInteractEvent;
 public class WaterScoopListener implements Listener {
     private final NetherWater plugin;
     private final ConfigManager configManager;
+    private final MessageManager messageManager;
 
     public WaterScoopListener(NetherWater plugin) {
         this.plugin = plugin;
+
         this.configManager = plugin.getConfigManager();
+        this.messageManager = plugin.getMessageManager();
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -39,7 +43,7 @@ public class WaterScoopListener implements Listener {
         }
 
         if (player.hasPermission("netherwater.scooping.bypass")) {
-            this.plugin.dump("Stopped by permissions");
+            this.messageManager.dump("Stopped by permissions");
         }
 
         if (!this.configManager.isScoopingDisabled() || player.hasPermission("netherwater.scooping.bypass")) {

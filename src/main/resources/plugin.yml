@@ -11,10 +11,9 @@ softdepend:
   - WorldGuard
 
 commands:
-  nwreload:
-    description: Reload the Nether Water configuration
-    aliases: [nwr]
-    usage: /nwreload or /nwr
+  netherwater:
+    description: Base command of this plugin. It needs some parameters to work properly.
+    aliases: [nw]
 
 permissions:
   netherwater.*:
@@ -22,21 +21,45 @@ permissions:
     children:
       netherwater.use.*: true
       netherwater.world.bypass: true
-      netherwater.reload: true
-  netherwater.reload:
-    description: Allows players to reload the configuration
-    default: op
-#  netherwater.use.WORLD:
-#    description: Allows players to use water in specific non disabled world
+      netherwater.command.*: true
+
   netherwater.use.*:
     description: Allows players to use water in all non disabled nether worlds
     default: op
+#  netherwater.use.WORLD:
+#    description: Allows players to use water in specific non disabled world
+
   netherwater.world.bypass:
     description: Allows players to bypass the disabled worlds and place water
     default: op
   netherwater.spread.bypass:
-    description: Turn off spread limits for players with this permission. Requires allow this feature in config!
+    description: Turns off spread limits for players with this permission. Requires allow this feature in config!
     default: false
   netherwater.scooping.bypass:
     description: Allows players to scoop water into bucket
     default: false
+
+  netherwater.command.*:
+    description: Allows using all of the commands
+    default: op
+    children:
+      netherwater.command.help: true
+      netherwater.command.version: true
+      netherwater.command.check: true
+      netherwater.command.enable: true
+      netherwater.command.disable: true
+  netherwater.command.help:
+    description: Allows using /nw help command
+    default: op
+  netherwater.command.version:
+    description: Allows using /nw version command
+    default: op
+  netherwater.command.check:
+    description: Allows using /nw check command
+    default: op
+  netherwater.command.enable:
+    description: Allows using /nw enable command
+    default: op
+  netherwater.command.disable:
+    description: Allows using /nw disable command
+    default: op

@@ -1,6 +1,7 @@
 package cz.ceskydj.netherwater.listeners;
 
 import cz.ceskydj.netherwater.NetherWater;
+import cz.ceskydj.netherwater.managers.MessageManager;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -14,16 +15,19 @@ import java.util.Objects;
 
 public class BlockBreakListener implements Listener {
     private final NetherWater plugin;
+    private final MessageManager messageManager;
 
     public BlockBreakListener(NetherWater plugin) {
         this.plugin = plugin;
+
+        this.messageManager = plugin.getMessageManager();
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onBlockBreak(BlockBreakEvent event) {
-        this.plugin.dump("Block break event has been handled.");
-        this.plugin.dump("- World: " + Objects.requireNonNull(event.getBlock()).getWorld().getName() + " (type: " + event.getBlock().getWorld().getEnvironment() + ")");
-        this.plugin.dump("- Player: " + event.getPlayer());
+        this.messageManager.dump("Block break event has been handled.");
+        this.messageManager.dump("- World: " + Objects.requireNonNull(event.getBlock()).getWorld().getName() + " (type: " + event.getBlock().getWorld().getEnvironment() + ")");
+        this.messageManager.dump("- Player: " + event.getPlayer());
 
         Player player = event.getPlayer();
 

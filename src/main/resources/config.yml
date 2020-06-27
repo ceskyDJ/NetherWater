@@ -29,6 +29,17 @@ infinite-sources: false
 # Messages for translation
 # Change only text in quotation marks ("")!
 # If you need to use quotation mark in your text, use \" instead
+# Use can use colors! Just write & and color code (for ex.: &a for light green)
 messages:
-  permissions: "You do not have permission to do that!"
-  config-reload: "Nether Water configuration reloaded!"
+  prefix: "&f[&cNether&bWater&f]"
+  permissions: "&cYou don't have permission to do that"
+  command-permissions: "&cYou don't have permission for this command"
+  help.heading: "&l&aHelp page"
+  help.underline: "&a=========="
+  help.help: "&9%command% help &r- Show this page"
+  help.version: "&9%command% version &r- Show current version of the plugin"
+  help.check: "&9%command% check &r- Check for updates of the plugin"
+  version: "&l&aVersion: &r%version%"
+  check.old: "&eUpdater has found a new version %version%!"
+  check.latest: "&aYou have the newest version of the plugin."
+  check.error: "&cUpdate check has't been successful."

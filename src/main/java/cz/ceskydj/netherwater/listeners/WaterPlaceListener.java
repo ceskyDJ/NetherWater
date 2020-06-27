@@ -1,6 +1,7 @@
 package cz.ceskydj.netherwater.listeners;
 
 import cz.ceskydj.netherwater.NetherWater;
+import cz.ceskydj.netherwater.managers.MessageManager;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -15,18 +16,21 @@ import java.util.Objects;
 
 public class WaterPlaceListener implements Listener {
     private final NetherWater plugin;
+    private final MessageManager messageManager;
 
     public WaterPlaceListener(NetherWater plugin) {
         this.plugin = plugin;
+
+        this.messageManager = plugin.getMessageManager();
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerInteract(PlayerInteractEvent event) {
-        this.plugin.dump("Player interact event has been handled.");
-        this.plugin.dump("- Action: " + event.getAction());
-        this.plugin.dump("- Item: " + (event.getItem() != null ? event.getItem().getType() : "NULL"));
-        this.plugin.dump("- World: " + Objects.requireNonNull(event.getClickedBlock()).getWorld().getName() + " (type: " + event.getClickedBlock().getWorld().getEnvironment() + ")");
-        this.plugin.dump("- Player: " + event.getPlayer());
+        this.messageManager.dump("Player interact event has been handled.");
+        this.messageManager.dump("- Action: " + event.getAction());
+        this.messageManager.dump("- Item: " + (event.getItem() != null ? event.getItem().getType() : "NULL"));
+        this.messageManager.dump("- World: " + Objects.requireNonNull(event.getClickedBlock()).getWorld().getName() + " (type: " + event.getClickedBlock().getWorld().getEnvironment() + ")");
+        this.messageManager.dump("- Player: " + event.getPlayer());
 
         if (event.getAction() != Action.RIGHT_CLICK_BLOCK) {
             return;

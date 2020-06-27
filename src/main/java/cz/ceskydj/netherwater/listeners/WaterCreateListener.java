@@ -1,7 +1,8 @@
 package cz.ceskydj.netherwater.listeners;
 
 import cz.ceskydj.netherwater.NetherWater;
-import cz.ceskydj.netherwater.config.ConfigManager;
+import cz.ceskydj.netherwater.managers.ConfigManager;
+import cz.ceskydj.netherwater.managers.MessageManager;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -16,10 +17,13 @@ import org.bukkit.event.block.FluidLevelChangeEvent;
 public class WaterCreateListener implements Listener {
     private final NetherWater plugin;
     private final ConfigManager configManager;
+    private final MessageManager messageManager;
 
     public WaterCreateListener(NetherWater plugin) {
         this.plugin = plugin;
+
         this.configManager = plugin.getConfigManager();
+        this.messageManager = plugin.getMessageManager();
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
@@ -62,10 +66,10 @@ public class WaterCreateListener implements Listener {
     public void onFluidLevelChange(FluidLevelChangeEvent event) {
         Block block = event.getBlock();
 
-        this.plugin.dump("Fluid level change event has been handled.");
-        this.plugin.dump("- World: " + block.getWorld().getName());
-        this.plugin.dump("- Block: " + block.getType().name());
-        this.plugin.dump("- Metadata: " + block.getBlockData().getAsString(true));
+        this.messageManager.dump("Fluid level change event has been handled.");
+        this.messageManager.dump("- World: " + block.getWorld().getName());
+        this.messageManager.dump("- Block: " + block.getType().name());
+        this.messageManager.dump("- Metadata: " + block.getBlockData().getAsString(true));
 
         World world = block.getWorld();
         if (world.getEnvironment() != World.Environment.NETHER) {
