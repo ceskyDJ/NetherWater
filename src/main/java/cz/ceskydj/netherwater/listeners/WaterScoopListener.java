@@ -37,6 +37,11 @@ public class WaterScoopListener implements Listener {
 
         Player player = event.getPlayer();
         Block selectedBlock = event.getClickedBlock().getRelative(event.getBlockFace());
+
+        if (selectedBlock.getType() != Material.WATER) {
+            return;
+        }
+
         // Check general conditions for using this plugin (world type, player permissions, world height etc.)
         if (!this.plugin.canBeUsedThisPlugin(player, selectedBlock)) {
             return;
