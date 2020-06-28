@@ -47,6 +47,7 @@ public class NetherWater extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new WaterFlowListener(this), this);
         this.getServer().getPluginManager().registerEvents(new WaterScoopListener(this), this);
         this.getServer().getPluginManager().registerEvents(new WaterCreateListener(this), this);
+        this.getServer().getPluginManager().registerEvents(new WaterDispenseListener(this), this);
 
         this.getCommand("netherwater").setExecutor(new BaseCommand(this));
         this.getCommand("netherwater").setTabCompleter(new BaseCommand(this));
