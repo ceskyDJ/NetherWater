@@ -1,19 +1,34 @@
 # NetherWater
-Simple [Spigot plugin](https://www.spigotmc.org/resources/nether-water-enable-water-in-nether-worlds.79256/) that allows players to use water buckets and ice blocks in nether worlds.
+Simple [Spigot plugin](https://www.spigotmc.org/resources/nether-water-enable-water-in-nether-worlds.79256/) that allows players to use water in nether worlds. They can use buckets, ice blocks and dispensers for spawning water.
 
 This is a fork of [KlutzyBubbles/NetherWater](https://github.com/KlutzyBubbles/NetherWater) repository.
 
 ## Commands
-- **/nwreload** or **/nwr** - reload plugin configuration
+- **/nw** or **/nw help** - show command list
+- **/nw version** - show current plugin version
+- **/nw check** - check for plugin updates
 
 ## Permissions
+### Using the plugin
 - **netherwater.use.WORLD** - using plugin features in some world
 - **netherwater.use.*** - using plugin features in all worlds
+
+### Bypasses
 - **netherwater.world.bypass** - turn on plugin features in disabled worlds for some players
 - **netherwater.spread.bypass** - disable spread limits for some players - **needs to allow this feature in config file!**
-- **netherwater.scooping.bypass** - allow scooping water into bucket for some players
-- **netherwater.reload** - use /nwreload (or /nwr) command
-- **netherwater.*** - every permissions of this plugin
+- **netherwater.scooping.bypass** - allow scooping water into buckets for some players
+- **netherwater.disappearing.bypass** - turn off water disappearing for some players
+- **netherwater.bypass** - all bypasses in one permission
+
+### Commands
+- **netherwater.command.help** - use /nw help command
+- **netherwater.command.version** - use /nw version command
+- **netherwater.command.check** - use /nw check command
+- **netherwater.command.*** - use all the commands
+
+### Special
+- **netherwater.*** - every permission of this plugin except some bypasses
+- **netherwater.op** - just like netherwater.* but includes all bypasses
 
 ## Default configuration
 ```YAML
@@ -45,10 +60,25 @@ spread-bypass: false
 scooping-into-buckets: false
 # Infinite sources of water is disabled by default
 infinite-sources: false
+# Water automatically disappears after specified number of minutes
+# Set this property to 0 if you want to disable this behaviour
+# You need to reload or restart server to apply change of this property
+water-disappearing: 30
 # Messages for translation
 # Change only text in quotation marks ("")!
 # If you need to use quotation mark in your text, use \" instead
+# Use can use colors! Just write & and color code (for ex.: &a for light green)
 messages:
-  permissions: "You do not have permission to do that!"
-  config-reload: "Nether Water configuration reloaded!"
+  prefix: "&f[&cNether&bWater&f]"
+  permissions: "&cYou don't have permission to do that"
+  command-permissions: "&cYou don't have permission for this command"
+  help.heading: "&l&aHelp page"
+  help.underline: "&a=========="
+  help.help: "&9%command% help &r- Show this page"
+  help.version: "&9%command% version &r- Show current version of the plugin"
+  help.check: "&9%command% check &r- Check for updates of the plugin"
+  version: "&l&aVersion: &r%version%"
+  check.old: "&eUpdater has found a new version %version%!"
+  check.latest: "&aYou have the newest version of the plugin."
+  check.error: "&cUpdate check has't been successful."
 ```
