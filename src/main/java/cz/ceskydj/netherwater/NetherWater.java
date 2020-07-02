@@ -9,30 +9,36 @@ import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.protection.flags.Flags;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
 import cz.ceskydj.netherwater.commands.BaseCommand;
+import cz.ceskydj.netherwater.database.DB;
 import cz.ceskydj.netherwater.exceptions.PluginNotFoundException;
 import cz.ceskydj.netherwater.listeners.*;
 import cz.ceskydj.netherwater.managers.ConfigManager;
 import cz.ceskydj.netherwater.managers.ConfigManipulator;
 import cz.ceskydj.netherwater.managers.MessageManager;
+import cz.ceskydj.netherwater.tasks.WaterDisappearingAgent;
 import cz.ceskydj.netherwater.updater.UpdateChecker;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitScheduler;
 
 public class NetherWater extends JavaPlugin {
     private WorldGuardPlugin worldGuard = null;
 
     private ConfigManager configManager;
     private MessageManager messageManager;
+    private DB db;
 
     @Override
     public void onEnable() {
         ConfigManipulator configManipulator = new ConfigManipulator(this);
         this.configManager = new ConfigManager(configManipulator);
         this.messageManager = new MessageManager(this);
+        this.db = new DB("data.db", this);
 
         try {
             this.worldGuard = this.getWorldGuard();
@@ -42,15 +48,22 @@ public class NetherWater extends JavaPlugin {
             this.messageManager.consoleMessage("World Guard hasn't been found.");
         }
 
-        this.getServer().getPluginManager().registerEvents(new WaterPlaceListener(this), this);
-        this.getServer().getPluginManager().registerEvents(new BlockBreakListener(this), this);
-        this.getServer().getPluginManager().registerEvents(new WaterFlowListener(this), this);
-        this.getServer().getPluginManager().registerEvents(new WaterScoopListener(this), this);
-        this.getServer().getPluginManager().registerEvents(new WaterCreateListener(this), this);
-        this.getServer().getPluginManager().registerEvents(new WaterDispenseListener(this), this);
+        PluginManager pluginManager = this.getServer().getPluginManager();
+        pluginManager.registerEvents(new WaterPlaceListener(this), this);
+        pluginManager.registerEvents(new BlockBreakListener(this), this);
+        pluginManager.registerEvents(new WaterFlowListener(this), this);
+        pluginManager.registerEvents(new WaterScoopListener(this), this);
+        pluginManager.registerEvents(new WaterCreateListener(this), this);
+        pluginManager.registerEvents(new WaterDispenseListener(this), this);
+        pluginManager.registerEvents(new WaterReplaceListener(this), this);
 
         this.getCommand("netherwater").setExecutor(new BaseCommand(this));
         this.getCommand("netherwater").setTabCompleter(new BaseCommand(this));
+
+        BukkitScheduler scheduler = this.getServer().getScheduler();
+        if (this.configManager.isWaterDisappearingEnabled()) {
+            scheduler.scheduleSyncRepeatingTask(this, new WaterDisappearingAgent(this), 0L, 200L);
+        }
 
         this.messageManager.consoleMessage("Plugin loaded successfully", ChatColor.GREEN);
 
@@ -60,6 +73,8 @@ public class NetherWater extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        this.db.closeConnection();
+
         this.messageManager.consoleMessage("Plugin has been disabled successfully");
     }
 
@@ -79,6 +94,10 @@ public class NetherWater extends JavaPlugin {
 
     public MessageManager getMessageManager() {
         return this.messageManager;
+    }
+
+    public DB getDatabaseWrapper() {
+        return this.db;
     }
 
     public boolean canBuild(Player player, Block block) {

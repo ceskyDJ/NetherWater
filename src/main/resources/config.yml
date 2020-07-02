@@ -26,6 +26,10 @@ spread-bypass: false
 scooping-into-buckets: false
 # Infinite sources of water is disabled by default
 infinite-sources: false
+# Water automatically disappears after specified number of minutes
+# Set this property to 0 if you want to disable this behaviour
+# You need to reload or restart server to apply change of this property
+water-disappearing: 30
 # Messages for translation
 # Change only text in quotation marks ("")!
 # If you need to use quotation mark in your text, use \" instead

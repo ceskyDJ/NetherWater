@@ -1,6 +1,8 @@
 package cz.ceskydj.netherwater.listeners;
 
 import cz.ceskydj.netherwater.NetherWater;
+import cz.ceskydj.netherwater.database.DB;
+import cz.ceskydj.netherwater.database.WaterSource;
 import cz.ceskydj.netherwater.managers.ConfigManager;
 import cz.ceskydj.netherwater.managers.MessageManager;
 import org.bukkit.Bukkit;
@@ -21,12 +23,14 @@ public class WaterDispenseListener implements Listener {
     private final NetherWater plugin;
     private final MessageManager messageManager;
     private final ConfigManager configManager;
+    private final DB db;
 
     public WaterDispenseListener(NetherWater plugin) {
         this.plugin = plugin;
 
         this.messageManager = plugin.getMessageManager();
         this.configManager = plugin.getConfigManager();
+        this.db = plugin.getDatabaseWrapper();
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -75,7 +79,16 @@ public class WaterDispenseListener implements Listener {
                     inventory.setItem(bucketPosition, new ItemStack(Material.BUCKET));
                 }
             });
+
+            if (!player.hasPermission("netherwater.disappearing.bypass")) {
+                this.db.insertWaterBlock(targetBlock, WaterSource.DISPENSER);
+            }
         } else if (item.getType() == Material.BUCKET) {
+            Vector vector = event.getVelocity();
+            Block targetBlock = block.getWorld().getBlockAt(vector.getBlockX(), vector.getBlockY(), vector.getBlockZ());
+
+            this.db.deleteWaterBlock(targetBlock);
+
             if (!this.configManager.isScoopingDisabled() || player.hasPermission("netherwater.scooping.bypass")) {
                 return;
             }
@@ -84,9 +97,6 @@ public class WaterDispenseListener implements Listener {
             event.setCancelled(true);
 
             // Remove water block
-            Vector vector = event.getVelocity();
-            Block targetBlock = block.getWorld().getBlockAt(vector.getBlockX(), vector.getBlockY(), vector.getBlockZ());
-
             Levelled flowingWater = (Levelled) Material.WATER.createBlockData();
             flowingWater.setLevel(1);
 

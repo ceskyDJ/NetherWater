@@ -1,6 +1,7 @@
 package cz.ceskydj.netherwater.listeners;
 
 import cz.ceskydj.netherwater.NetherWater;
+import cz.ceskydj.netherwater.database.DB;
 import cz.ceskydj.netherwater.managers.ConfigManager;
 import cz.ceskydj.netherwater.managers.MessageManager;
 import org.bukkit.Material;
@@ -17,12 +18,14 @@ public class WaterScoopListener implements Listener {
     private final NetherWater plugin;
     private final ConfigManager configManager;
     private final MessageManager messageManager;
+    private final DB db;
 
     public WaterScoopListener(NetherWater plugin) {
         this.plugin = plugin;
 
         this.configManager = plugin.getConfigManager();
         this.messageManager = plugin.getMessageManager();
+        this.db = plugin.getDatabaseWrapper();
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -63,5 +66,7 @@ public class WaterScoopListener implements Listener {
         flowingWater.setLevel(1);
 
         selectedBlock.setBlockData(flowingWater);
+
+        this.db.deleteWaterBlock(selectedBlock);
     }
 }

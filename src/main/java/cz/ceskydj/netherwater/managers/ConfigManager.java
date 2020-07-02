@@ -52,4 +52,12 @@ public class ConfigManager {
     public boolean areInfiniteSourcesDisabled() {
         return !this.configManipulator.getBoolean("infinite-sources");
     }
+
+    public boolean isWaterDisappearingEnabled() {
+        return this.configManipulator.getInt("water-disappearing") != 0;
+    }
+
+    public int getWaterDisappearingTime() {
+        return this.configManipulator.getInt("water-disappearing");
+    }
 }

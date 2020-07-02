@@ -4,7 +4,7 @@ description: Allow players to use water in the nether
 author: ceskyDJ
 
 main: cz.ceskydj.netherwater.NetherWater
-database: false
+database: true
 api-version: "1.15"
 softdepend:
   - WorldEdit
@@ -16,6 +16,12 @@ commands:
     aliases: [nw]
 
 permissions:
+  netherwater.op:
+    description: Adds all possible permissions to the user
+    children:
+      netherwater.*: true
+      netherwater.bypass: true
+
   netherwater.*:
     description: Allows use of every feature in the plugin
     children:
@@ -29,6 +35,13 @@ permissions:
 #  netherwater.use.WORLD:
 #    description: Allows players to use water in specific non disabled world
 
+  netherwater.bypass:
+    description: Allows players to bypass all possible stuff of the plugin
+    children:
+      netherwater.world.bypass: true
+      netherwater.spread.bypass: true
+      netherwater.scooping.bypass: true
+      netherwater.disappearing.bypass: true
   netherwater.world.bypass:
     description: Allows players to bypass the disabled worlds and place water
     default: op
@@ -38,6 +51,9 @@ permissions:
   netherwater.scooping.bypass:
     description: Allows players to scoop water into bucket
     default: false
+  netherwater.disappearing.bypass:
+    description: Disables automatic water disappearing for players
+    default: false
 
   netherwater.command.*:
     description: Allows using all of the commands
@@ -46,8 +62,6 @@ permissions:
       netherwater.command.help: true
       netherwater.command.version: true
       netherwater.command.check: true
-      netherwater.command.enable: true
-      netherwater.command.disable: true
   netherwater.command.help:
     description: Allows using /nw help command
     default: op
@@ -56,10 +70,4 @@ permissions:
     default: op
   netherwater.command.check:
     description: Allows using /nw check command
-    default: op
-  netherwater.command.enable:
-    description: Allows using /nw enable command
-    default: op
-  netherwater.command.disable:
-    description: Allows using /nw disable command
     default: op
