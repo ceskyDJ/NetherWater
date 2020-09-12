@@ -17,6 +17,8 @@ import cz.ceskydj.netherwater.managers.ConfigManipulator;
 import cz.ceskydj.netherwater.managers.MessageManager;
 import cz.ceskydj.netherwater.tasks.WaterDisappearingAgent;
 import cz.ceskydj.netherwater.updater.UpdateChecker;
+import org.bstats.bukkit.Metrics;
+import org.bstats.bukkit.MetricsLite;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
@@ -27,6 +29,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
 
 public class NetherWater extends JavaPlugin {
+    private final int bStatsPluginId = 8833;
+
     private WorldGuardPlugin worldGuard = null;
 
     private ConfigManager configManager;
@@ -63,6 +67,11 @@ public class NetherWater extends JavaPlugin {
         BukkitScheduler scheduler = this.getServer().getScheduler();
         if (this.configManager.isWaterDisappearingEnabled()) {
             scheduler.scheduleSyncRepeatingTask(this, new WaterDisappearingAgent(this), 0L, 200L);
+        }
+
+        MetricsLite metricsLite = new MetricsLite(this, this.bStatsPluginId);
+        if (metricsLite.isEnabled()) {
+            this.messageManager.consoleMessage("Connected to bStats", ChatColor.GREEN);
         }
 
         this.messageManager.consoleMessage("Plugin loaded successfully", ChatColor.GREEN);
