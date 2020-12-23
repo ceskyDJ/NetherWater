@@ -2,6 +2,7 @@ package cz.ceskydj.netherwater.managers;
 
 import cz.ceskydj.netherwater.NetherWater;
 import de.leonhard.storage.Config;
+import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
@@ -18,23 +19,26 @@ import java.util.Map;
 
 public class ConfigManipulator {
     private final NetherWater plugin;
+    private final MessageManager messageManager;
 
     private YamlConfiguration defaultConfig;
     private Config configData;
 
     public ConfigManipulator(NetherWater plugin) {
         this.plugin = plugin;
+        this.messageManager = plugin.getMessageManager();
 
         this.loadConfig();
     }
 
     private void loadConfig() {
         if (!this.plugin.getDataFolder().exists()) {
-            this.plugin.getDataFolder().mkdir();
+            if(!this.plugin.getDataFolder().mkdir()) {
+                this.messageManager.consoleMessage("Error occurred while creating plugin's data folder (plugins/NetherWater).", ChatColor.RED);
+            }
         }
 
         File configFile = new File(this.plugin.getDataFolder(), "config.yml");
-
         if (!configFile.exists()) {
             this.plugin.saveResource("config.yml", false);
         } else {
