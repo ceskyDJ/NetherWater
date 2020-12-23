@@ -33,6 +33,7 @@ public class ConfigManipulator {
 
     private void loadConfig() {
         if (!this.plugin.getDataFolder().exists()) {
+            // Create plugin's dir and check if it has been successful
             if(!this.plugin.getDataFolder().mkdir()) {
                 this.messageManager.consoleMessage("Error occurred while creating plugin's data folder (plugins/NetherWater).", ChatColor.RED);
             }
@@ -40,10 +41,17 @@ public class ConfigManipulator {
 
         File configFile = new File(this.plugin.getDataFolder(), "config.yml");
         if (!configFile.exists()) {
+            // Generate config file from the default one
             this.plugin.saveResource("config.yml", false);
-        } else {
-            this.configData = new Config(configFile);
+
+            // Check if generating has been successful
+            if(!configFile.exists()) {
+                this.messageManager.consoleMessage("Error occurred while creating default config file.", ChatColor.RED);
+            }
         }
+
+        // Get configurations from config file
+        this.configData = new Config(configFile);
 
         // Loading default config for cases that local config in plugins directory doesn't contains some values
         try {
