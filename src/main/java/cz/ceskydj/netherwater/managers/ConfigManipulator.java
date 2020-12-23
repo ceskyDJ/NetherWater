@@ -16,6 +16,7 @@ import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class ConfigManipulator {
     private final NetherWater plugin;
@@ -55,7 +56,7 @@ public class ConfigManipulator {
 
         // Loading default config for cases that local config in plugins directory doesn't contains some values
         try {
-            Reader defaultStream = new InputStreamReader(this.plugin.getResource("config.yml"), StandardCharsets.UTF_8);
+            Reader defaultStream = new InputStreamReader(Objects.requireNonNull(this.plugin.getResource("config.yml")), StandardCharsets.UTF_8);
             this.defaultConfig = YamlConfiguration.loadConfiguration(defaultStream);
         } catch (Exception ignored) {
         }
@@ -128,7 +129,7 @@ public class ConfigManipulator {
     }
 
     public char getChar(String key) {
-        char defaultValue = this.defaultConfig.getString(key).charAt(0);
+        char defaultValue = Objects.requireNonNull(this.defaultConfig.getString(key)).charAt(0);
 
         return this.configData.getOrDefault(key, defaultValue);
     }
