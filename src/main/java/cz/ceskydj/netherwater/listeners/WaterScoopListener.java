@@ -4,6 +4,7 @@ import cz.ceskydj.netherwater.NetherWater;
 import cz.ceskydj.netherwater.database.DB;
 import cz.ceskydj.netherwater.managers.ConfigManager;
 import cz.ceskydj.netherwater.managers.MessageManager;
+import cz.ceskydj.netherwater.managers.PermissionManager;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.Levelled;
@@ -19,6 +20,7 @@ public class WaterScoopListener implements Listener {
     private final ConfigManager configManager;
     private final MessageManager messageManager;
     private final DB db;
+    private final PermissionManager permissionManager;
 
     public WaterScoopListener(NetherWater plugin) {
         this.plugin = plugin;
@@ -26,6 +28,7 @@ public class WaterScoopListener implements Listener {
         this.configManager = plugin.getConfigManager();
         this.messageManager = plugin.getMessageManager();
         this.db = plugin.getDatabaseWrapper();
+        this.permissionManager = plugin.getPermissionManager();
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -46,7 +49,7 @@ public class WaterScoopListener implements Listener {
         }
 
         // Check general conditions for using this plugin (world type, player permissions, world height etc.)
-        if (!this.plugin.canBeUsedThisPlugin(player, selectedBlock)) {
+        if (!this.permissionManager.canBeUsedThisPlugin(player, selectedBlock)) {
             return;
         }
 

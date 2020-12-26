@@ -5,6 +5,7 @@ import cz.ceskydj.netherwater.database.DB;
 import cz.ceskydj.netherwater.database.WaterSource;
 import cz.ceskydj.netherwater.managers.ConfigManager;
 import cz.ceskydj.netherwater.managers.MessageManager;
+import cz.ceskydj.netherwater.managers.PermissionManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -24,6 +25,7 @@ public class WaterDispenseListener implements Listener {
     private final MessageManager messageManager;
     private final ConfigManager configManager;
     private final DB db;
+    private final PermissionManager permissionManager;
 
     public WaterDispenseListener(NetherWater plugin) {
         this.plugin = plugin;
@@ -31,6 +33,7 @@ public class WaterDispenseListener implements Listener {
         this.messageManager = plugin.getMessageManager();
         this.configManager = plugin.getConfigManager();
         this.db = plugin.getDatabaseWrapper();
+        this.permissionManager = plugin.getPermissionManager();
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -55,7 +58,7 @@ public class WaterDispenseListener implements Listener {
 
         // Check general conditions for using this plugin (world type, player permissions, world height etc.)
         Player player = this.plugin.getClosestPlayer(block.getLocation());
-        if (!this.plugin.canBeUsedThisPlugin(player, block)) {
+        if (!this.permissionManager.canBeUsedThisPlugin(player, block)) {
             return;
         }
 

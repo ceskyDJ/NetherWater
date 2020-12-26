@@ -4,6 +4,7 @@ import cz.ceskydj.netherwater.NetherWater;
 import cz.ceskydj.netherwater.database.DB;
 import cz.ceskydj.netherwater.database.WaterSource;
 import cz.ceskydj.netherwater.managers.MessageManager;
+import cz.ceskydj.netherwater.managers.PermissionManager;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -23,12 +24,14 @@ public class WaterPlaceListener implements Listener {
     private final NetherWater plugin;
     private final MessageManager messageManager;
     private final DB db;
+    private final PermissionManager permissionManager;
 
     public WaterPlaceListener(NetherWater plugin) {
         this.plugin = plugin;
 
         this.messageManager = plugin.getMessageManager();
         this.db = plugin.getDatabaseWrapper();
+        this.permissionManager = plugin.getPermissionManager();
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
@@ -52,7 +55,7 @@ public class WaterPlaceListener implements Listener {
         }
 
         // Check general conditions for using this plugin (world type, player permissions, world height etc.)
-        if (!this.plugin.canBeUsedThisPlugin(player, selectedBlock)) {
+        if (!this.permissionManager.canBeUsedThisPlugin(player, selectedBlock)) {
             return;
         }
 
