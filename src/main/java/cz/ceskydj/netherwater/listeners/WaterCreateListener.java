@@ -99,7 +99,11 @@ public class WaterCreateListener implements Listener {
         for (BlockFace face : faces) {
             Block testedBlock = block.getRelative(face, 1);
             if (testedBlock.getType() == Material.WATER) {
-                numberOfWaterBlocks++;
+                // Count only still water blocks (with level 0)
+                Levelled water = (Levelled) testedBlock.getBlockData();
+                if (water.getLevel() == 0) {
+                    numberOfWaterBlocks++;
+                }
             }
         }
 
