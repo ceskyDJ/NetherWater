@@ -3,6 +3,17 @@ Simple [Spigot plugin](https://www.spigotmc.org/resources/nether-water-enable-wa
 
 This is a fork of [KlutzyBubbles/NetherWater](https://github.com/KlutzyBubbles/NetherWater) repository.
 
+## Dependencies
+- [WorldGuard](https://enginehub.org/worldguard/) (optional) - if you need to integrate its protection system
+- [BKCommonLib](https://www.spigotmc.org/resources/bkcommonlib.39590/) (optional) - for modifying mobs' behaviour
+
+This is only NetherWater's direct dependencies! For the right functionality
+you need some other plugins (for example WorldEdit for WorldGuard). Read dependency
+information on individual plugins' pages, please.
+
+Optional dependencies aren't needed but if you don't provide them,
+some NetherWater's functionality will be turned off.
+
 ## Commands
 - **/nw** or **/nw help** - show command list
 - **/nw version** - show current plugin version

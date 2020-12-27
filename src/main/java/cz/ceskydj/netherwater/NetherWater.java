@@ -1,5 +1,6 @@
 package cz.ceskydj.netherwater;
 
+import com.bergerkiller.bukkit.common.internal.CommonPlugin;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import cz.ceskydj.netherwater.commands.BaseCommand;
 import cz.ceskydj.netherwater.database.DB;
@@ -40,10 +41,10 @@ public class NetherWater extends JavaPlugin {
 
         try {
             this.worldGuard = this.loadWorldGuard();
-            this.messageManager.consoleMessage("World Guard has been found and registered!", ChatColor.GREEN);
+            this.messageManager.consoleMessage("World Guard has been found and registered.", ChatColor.GREEN);
         } catch (PluginNotFoundException e) {
             this.worldGuard = null;
-            this.messageManager.consoleMessage("World Guard hasn't been found.");
+            this.messageManager.consoleMessage("World Guard hasn't been found. Some functionality won't be activated.");
         }
 
         PluginManager pluginManager = this.getServer().getPluginManager();
@@ -54,6 +55,15 @@ public class NetherWater extends JavaPlugin {
         pluginManager.registerEvents(new WaterCreateListener(this), this);
         pluginManager.registerEvents(new WaterDispenseListener(this), this);
         pluginManager.registerEvents(new WaterReplaceListener(this), this);
+
+        // Some listeners requires BKCommonLib
+        if (this.isBKCommonLibInstalled()) {
+            this.messageManager.consoleMessage("BKCommonLib has been found.", ChatColor.GREEN);
+
+            pluginManager.registerEvents(new MobMoveListener(this), this);
+        } else {
+            this.messageManager.consoleMessage("BKCommonLib hasn't been found. Some functionality won't be activated.");
+        }
 
         this.getCommand("netherwater").setExecutor(new BaseCommand(this));
         this.getCommand("netherwater").setTabCompleter(new BaseCommand(this));
@@ -89,6 +99,12 @@ public class NetherWater extends JavaPlugin {
         }
 
         return (WorldGuardPlugin) plugin;
+    }
+
+    private boolean isBKCommonLibInstalled() {
+        Plugin plugin = this.getServer().getPluginManager().getPlugin("BKCommonLib");
+
+        return (plugin instanceof CommonPlugin);
     }
 
     public ConfigManager getConfigManager() {

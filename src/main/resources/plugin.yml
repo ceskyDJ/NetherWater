@@ -9,6 +9,7 @@ api-version: "1.15"
 softdepend:
   - WorldEdit
   - WorldGuard
+  - BKCommonLib
 
 commands:
   netherwater:
