@@ -70,8 +70,8 @@ public class WaterPlaceListener implements Listener {
             event.getItem().setType(Material.BUCKET);
         }
 
-        if (!player.hasPermission("netherwater.disappearing.bypass")) {
-            this.db.insertWaterBlock(selectedBlock, WaterSource.BUCKET);
-        }
+        // If the player has bypass permission, the water block won't disappear
+        boolean disappear = !player.hasPermission("netherwater.disappearing.bypass");
+        this.db.insertWaterBlock(selectedBlock, WaterSource.BUCKET, disappear);
     }
 }

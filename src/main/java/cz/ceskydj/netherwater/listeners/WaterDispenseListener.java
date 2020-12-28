@@ -83,9 +83,9 @@ public class WaterDispenseListener implements Listener {
                 }
             });
 
-            if (!player.hasPermission("netherwater.disappearing.bypass")) {
-                this.db.insertWaterBlock(targetBlock, WaterSource.DISPENSER);
-            }
+            // If the player has bypass permission, the water block won't disappear
+            boolean disappear = !player.hasPermission("netherwater.disappearing.bypass");
+            this.db.insertWaterBlock(targetBlock, WaterSource.DISPENSER, disappear);
         } else if (item.getType() == Material.BUCKET) {
             Vector vector = event.getVelocity();
             Block targetBlock = block.getWorld().getBlockAt(vector.getBlockX(), vector.getBlockY(), vector.getBlockZ());

@@ -10,6 +10,7 @@ import cz.ceskydj.netherwater.managers.ConfigManager;
 import cz.ceskydj.netherwater.managers.ConfigManipulator;
 import cz.ceskydj.netherwater.managers.MessageManager;
 import cz.ceskydj.netherwater.managers.PermissionManager;
+import cz.ceskydj.netherwater.tasks.WaterAnimationAgent;
 import cz.ceskydj.netherwater.tasks.WaterDisappearingAgent;
 import cz.ceskydj.netherwater.updater.UpdateChecker;
 import org.bstats.bukkit.MetricsLite;
@@ -69,9 +70,12 @@ public class NetherWater extends JavaPlugin {
         this.getCommand("netherwater").setTabCompleter(new BaseCommand(this));
 
         BukkitScheduler scheduler = this.getServer().getScheduler();
+        // Water disappearing
         if (this.configManager.isWaterDisappearingEnabled()) {
             scheduler.scheduleSyncRepeatingTask(this, new WaterDisappearingAgent(this), 0L, 200L);
         }
+        // Water animation
+        scheduler.scheduleSyncRepeatingTask(this, new WaterAnimationAgent(this), 0L, 20L);
 
         MetricsLite metricsLite = new MetricsLite(this, this.bStatsPluginId);
         if (metricsLite.isEnabled()) {
