@@ -48,7 +48,12 @@ public class MobMoveListener implements Listener {
             return;
         }
 
-        if (!this.isRightEntity(entity.getType())) {
+        if (this.isExceptEntity(entity.getType())) {
+            return;
+        }
+
+        // Entity can be dead in this time, so it can't be converted to living entity
+        if (entity.isDead()) {
             return;
         }
 
@@ -69,10 +74,12 @@ public class MobMoveListener implements Listener {
         this.messageManager.dump("- Health: " + ((LivingEntity) entity).getHealth());
     }
 
-    private boolean isRightEntity(EntityType type) {
-        EntityType[] modifiedEntities = {EntityType.PIG_ZOMBIE, EntityType.MAGMA_CUBE, EntityType.WITHER_SKELETON};
+    private boolean isExceptEntity(EntityType type) {
+        EntityType[] exceptEntities = {
+                EntityType.GUARDIAN
+        };
 
-        for (EntityType modifiedEntity : modifiedEntities) {
+        for (EntityType modifiedEntity : exceptEntities) {
             if (modifiedEntity == type) {
                 return true;
             }
