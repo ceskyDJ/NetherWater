@@ -1,4 +1,5 @@
-# NetherWater
+![Nether Water](https://github.com/ceskyDJ/NetherWater/blob/master/other/logo.png "Nether Water logo")
+
 Simple [Spigot plugin](https://www.spigotmc.org/resources/nether-water-enable-water-in-nether-worlds.79256/) that allows players to use water in nether worlds. They can use buckets, ice blocks and dispensers for spawning water.
 
 This is a fork of [KlutzyBubbles/NetherWater](https://github.com/KlutzyBubbles/NetherWater) repository.
