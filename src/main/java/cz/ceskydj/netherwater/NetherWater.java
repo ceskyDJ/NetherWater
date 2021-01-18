@@ -4,12 +4,14 @@ import com.bergerkiller.bukkit.common.internal.CommonPlugin;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import cz.ceskydj.netherwater.commands.BaseCommand;
 import cz.ceskydj.netherwater.database.DB;
+import cz.ceskydj.netherwater.database.EntityStorage;
 import cz.ceskydj.netherwater.exceptions.PluginNotFoundException;
 import cz.ceskydj.netherwater.listeners.*;
 import cz.ceskydj.netherwater.managers.ConfigManager;
 import cz.ceskydj.netherwater.managers.ConfigManipulator;
 import cz.ceskydj.netherwater.managers.MessageManager;
 import cz.ceskydj.netherwater.managers.PermissionManager;
+import cz.ceskydj.netherwater.tasks.MobDamagingAgent;
 import cz.ceskydj.netherwater.tasks.WaterAnimationAgent;
 import cz.ceskydj.netherwater.tasks.WaterDisappearingAgent;
 import cz.ceskydj.netherwater.updater.UpdateChecker;
@@ -31,6 +33,7 @@ public class NetherWater extends JavaPlugin {
     private MessageManager messageManager;
     private DB db;
     private PermissionManager permissionManager;
+    private EntityStorage entityStorage;
 
     @Override
     public void onEnable() {
@@ -39,6 +42,9 @@ public class NetherWater extends JavaPlugin {
         this.messageManager = new MessageManager(this);
         this.db = new DB("data.db", this);
         this.permissionManager = new PermissionManager(this);
+
+        // Temporary storage for entities to be damaged
+        this.entityStorage = new EntityStorage();
 
         try {
             this.worldGuard = this.loadWorldGuard();
@@ -76,6 +82,8 @@ public class NetherWater extends JavaPlugin {
         }
         // Water animation
         scheduler.scheduleSyncRepeatingTask(this, new WaterAnimationAgent(this), 0L, 60L);
+        // Mob damaging
+        scheduler.scheduleSyncRepeatingTask(this, new MobDamagingAgent(this), 0L, 20L);
 
         MetricsLite metricsLite = new MetricsLite(this, this.bStatsPluginId);
         if (metricsLite.isEnabled()) {
@@ -91,6 +99,7 @@ public class NetherWater extends JavaPlugin {
     @Override
     public void onDisable() {
         this.db.closeConnection();
+        this.entityStorage.clearEntities();
 
         this.messageManager.consoleMessage("Plugin has been disabled successfully");
     }
@@ -129,6 +138,10 @@ public class NetherWater extends JavaPlugin {
 
     public PermissionManager getPermissionManager() {
         return permissionManager;
+    }
+
+    public EntityStorage getEntityStorage() {
+        return entityStorage;
     }
 
     public Player getClosestPlayer(org.bukkit.Location location) {
