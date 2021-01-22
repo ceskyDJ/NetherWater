@@ -1,8 +1,16 @@
 ![Nether Water](https://github.com/ceskyDJ/NetherWater/blob/master/other/logo.png "Nether Water logo")
 
-Simple [Spigot plugin](https://www.spigotmc.org/resources/nether-water-enable-water-in-nether-worlds.79256/) that allows players to use water in nether worlds. They can use buckets, ice blocks and dispensers for spawning water.
-
 This is a fork of [KlutzyBubbles/NetherWater](https://github.com/KlutzyBubbles/NetherWater) repository.
+
+Nether Water is a [Spigot plugin](https://www.spigotmc.org/resources/nether-water-enable-water-in-nether-worlds.79256/)
+allows players to use water in nether worlds. They can use buckets, ice blocks and dispensers for spawning water.
+Water added by WorldEdit is fully supported, too. Plugin adds some new properties to water in nether worlds. It provides
+hot water animation, water drying do to high temperatures in the nether and damaging mobs and players behaviour. Damaged
+are every non-underwater mobs. Nether mobs due to their water intolerance and other high water temperature for other
+ones. Players are damaged, too, of course.
+
+All these features can be configured to your needs. You can completely disable special functionality and limitations
+set by the plugin. For more information see "Permissions" and "Default configuration" sections, please.
 
 ## Dependencies
 - [WorldEdit](https://enginehub.org/worldedit/) (optional) - if you use WorldEdit, world changes are linked to this
