@@ -76,6 +76,18 @@ infinite-sources: false
 # Set this property to 0 if you want to disable this behaviour
 # You need to reload or restart server to apply change of this property
 water-disappearing: 30
+# Damage mobs in water in nether worlds (excluding underwater mobs - https://minecraft.fandom.com/wiki/Category:Underwater_Mobs)
+mob-damaging: true
+# Damage players in water in nether worlds (only survival mode players without god mode enabled)
+player-damaging: true
+# How many health point remove while damaging mobs and players
+# Mobs and players are hit every 20 ticks (usually ~ 1 second)
+# For example: player has 20 health points (10 hearts)
+damage-value:
+  mob: 1.0
+  player: 1.0
+# Allow water in nether worlds to be animated with smoke effect (hot watter effect)
+hot-water-animation: true
 # Messages for translation
 # Change only text in quotation marks ("")!
 # If you need to use quotation mark in your text, use \" instead
@@ -92,5 +104,5 @@ messages:
   version: "&l&aVersion: &r%version%"
   check.old: "&eUpdater has found a new version %version%!"
   check.latest: "&aYou have the newest version of the plugin."
-  check.error: "&cUpdate check has't been successful."
+  check.error: "&cUpdate check hasn't been successful."
 ```
