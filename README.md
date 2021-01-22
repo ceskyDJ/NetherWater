@@ -5,6 +5,8 @@ Simple [Spigot plugin](https://www.spigotmc.org/resources/nether-water-enable-wa
 This is a fork of [KlutzyBubbles/NetherWater](https://github.com/KlutzyBubbles/NetherWater) repository.
 
 ## Dependencies
+- [WorldEdit](https://enginehub.org/worldedit/) (optional) - if you use WorldEdit, world changes are linked to this
+  plugin (creating or deleting water blocks)
 - [WorldGuard](https://enginehub.org/worldguard/) (optional) - if you need to integrate its protection system
 - [BKCommonLib](https://www.spigotmc.org/resources/bkcommonlib.39590/) (optional) - for modifying mobs' behaviour
 
