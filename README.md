@@ -44,6 +44,10 @@ some NetherWater's functionality will be turned off.
 - **netherwater.*** - every permission of this plugin except some bypasses
 - **netherwater.op** - just like netherwater.* but includes all bypasses
 
+## Statistics
+Statistics are provided by [BStats](https://bstats.org/plugin/bukkit/Nether%20Water/8833).
+![BStats statistics](https://bstats.org/signatures/bukkit/Nether%20Water.svg "BStats statistics - how many servers and players use the plugin")
+
 ## Default configuration
 ```YAML
 #--------------------------------------------------------------------------------------------
