@@ -58,4 +58,4 @@ messages:
   version: "&l&aVersion: &r%version%"
   check.old: "&eUpdater has found a new version %version%!"
   check.latest: "&aYou have the newest version of the plugin."
-  check.error: "&cUpdate check has't been successful."
+  check.error: "&cUpdate check hasn't been successful."
