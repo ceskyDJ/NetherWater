@@ -60,4 +60,20 @@ public class ConfigManager {
     public int getWaterDisappearingTime() {
         return this.configManipulator.getInt("water-disappearing");
     }
+
+    public boolean isMobDamagingEnabled() {
+        return this.configManipulator.getBoolean("mob-damaging");
+    }
+
+    public boolean isPlayerDamagingEnabled() {
+        return this.configManipulator.getBoolean("player-damaging");
+    }
+
+    public double getMobDamageValue() {
+        return this.configManipulator.getDouble("damage-value.mob");
+    }
+
+    public double getPlayerDamageValue() {
+        return this.configManipulator.getDouble("damage-value.player");
+    }
 }

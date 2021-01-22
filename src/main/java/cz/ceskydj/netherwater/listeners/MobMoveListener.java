@@ -37,11 +37,19 @@ public class MobMoveListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onEntityMove(EntityMoveEvent event) {
+        if (!this.configManager.isMobDamagingEnabled()) {
+            return;
+        }
+
         this.processEntityMove(event.getEntity());
     }
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerMove(PlayerMoveEvent event) {
+        if (!this.configManager.isPlayerDamagingEnabled()) {
+            return;
+        }
+
         this.processEntityMove(event.getPlayer());
     }
 
