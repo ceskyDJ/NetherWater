@@ -58,7 +58,7 @@ public class DB {
                 + "     `world` TEXT NOT NULL,\n"
                 + "     `from` TEXT NOT NULL,\n"
                 + "     `disappear` INTEGER NOT NULL CHECK(`disappear` IN (0, 1)),"
-                + "     PRIMARY KEY (`x`, `y`, `z`)\n"
+                + "     PRIMARY KEY (`x`, `y`, `z`, `world`)\n"
                 + ");";
 
         try {
@@ -88,9 +88,9 @@ public class DB {
         // Disappear column is missing
         this.messageManager.dump("Upgrading database structure...");
 
-        // Add disappear column to the table
+        // Rename old table (backup it respectively)
         try {
-            String sql = "ALTER TABLE `water_blocks` ADD `disappear` INTEGER NOT NULL CHECK(`disappear` IN (0, 1))";
+            String sql = "ALTER TABLE `water_blocks` RENAME TO `water_blocks_backup`";
             Statement query = this.connection.createStatement();
 
             query.execute(sql);
@@ -98,10 +98,23 @@ public class DB {
             this.messageManager.dump("DB error: " + e.getMessage());
         }
 
-        // Fill disappear column with data (it's true for every item - items with opposite value didn't use to add)
+        // Generate the right structure
+        this.generateStructure();
+
+        // Revert data from the backup
         try {
-            // Fill all rows
-            String sql = "UPDATE `water_blocks` SET `disappear` = 1";
+            String sql = "INSERT INTO `water_blocks`(`x`, `y`, `z`, `placed`, `world`, `from`, `disappear`)\n" +
+                    "       SELECT `x`, `y`, `z`, `placed`, `world`, `from`, 1 FROM `water_blocks_backup`";
+            Statement query = this.connection.createStatement();
+
+            query.execute(sql);
+        } catch (SQLException e) {
+            this.messageManager.dump("DB error: " + e.getMessage());
+        }
+
+        // Delete the old table
+        try {
+            String sql = "DROP TABLE `water_blocks_backup`";
             Statement query = this.connection.createStatement();
 
             query.execute(sql);
