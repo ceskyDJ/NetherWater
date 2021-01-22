@@ -5,7 +5,7 @@ import org.bukkit.block.Block;
 import java.util.*;
 
 public class WorldEditChangesStorage {
-    private final List savedBlockChanges;
+    private final List<Block> savedBlockChanges;
 
     public WorldEditChangesStorage() {
         this.savedBlockChanges = new ArrayList<>();
