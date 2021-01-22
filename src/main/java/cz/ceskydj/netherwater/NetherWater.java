@@ -101,7 +101,9 @@ public class NetherWater extends JavaPlugin {
             scheduler.scheduleSyncRepeatingTask(this, new WaterDisappearingAgent(this), 0L, 200L);
         }
         // Water animation
-        scheduler.scheduleSyncRepeatingTask(this, new WaterAnimationAgent(this), 0L, 60L);
+        if (this.configManager.isWaterAnimationEnabled()) {
+            scheduler.scheduleSyncRepeatingTask(this, new WaterAnimationAgent(this), 0L, 60L);
+        }
         // Mob damaging
         scheduler.scheduleSyncRepeatingTask(this, new MobDamagingAgent(this), 0L, 20L);
         // WorldEdit changes batch parser

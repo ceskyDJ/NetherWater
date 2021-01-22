@@ -76,4 +76,8 @@ public class ConfigManager {
     public double getPlayerDamageValue() {
         return this.configManipulator.getDouble("damage-value.player");
     }
+
+    public boolean isWaterAnimationEnabled() {
+        return this.configManipulator.getBoolean("hot-water-animation");
+    }
 }

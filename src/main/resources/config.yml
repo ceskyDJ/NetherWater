@@ -40,6 +40,8 @@ player-damaging: true
 damage-value:
   mob: 1.0
   player: 1.0
+# Allow water in nether worlds to be animated with smoke effect (hot watter effect)
+hot-water-animation: true
 # Messages for translation
 # Change only text in quotation marks ("")!
 # If you need to use quotation mark in your text, use \" instead
