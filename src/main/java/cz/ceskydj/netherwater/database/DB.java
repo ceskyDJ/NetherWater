@@ -7,10 +7,9 @@ import org.bukkit.block.Block;
 
 import java.io.File;
 import java.sql.*;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.Date;
-import java.util.List;
-import java.util.Objects;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class DB {
     private final NetherWater plugin;
@@ -139,6 +138,27 @@ public class DB {
         }
     }
 
+    public void insertMultipleWaterBlocks(List<Block> blocks, WaterSource from, boolean disappear) {
+        try {
+            this.connection.setAutoCommit(false);
+
+            for (Block block : blocks) {
+                this.insertWaterBlock(block, from, disappear);
+            }
+
+            this.connection.commit();
+            this.connection.setAutoCommit(true);
+        } catch (SQLException e) {
+            try {
+                this.connection.rollback();
+            } catch (SQLException e2) {
+                this.messageManager.dump("DB error: " + e2.getMessage());
+            }
+
+            this.messageManager.dump("DB error: " + e.getMessage());
+        }
+    }
+
     public void deleteWaterBlock(Block block) {
         String sql = "DELETE FROM `water_blocks` WHERE `x` = ? AND `y` = ? AND `z` = ?";
 
@@ -151,6 +171,27 @@ public class DB {
 
             query.executeUpdate();
         } catch (SQLException e) {
+            this.messageManager.dump("DB error: " + e.getMessage());
+        }
+    }
+
+    public void deleteMultipleWaterBlocks(List<Block> blocks) {
+        try {
+            this.connection.setAutoCommit(false);
+
+            for (Block block : blocks) {
+                this.deleteWaterBlock(block);
+            }
+
+            this.connection.commit();
+            this.connection.setAutoCommit(true);
+        } catch (SQLException e) {
+            try {
+                this.connection.rollback();
+            } catch (SQLException e2) {
+                this.messageManager.dump("DB error: " + e2.getMessage());
+            }
+
             this.messageManager.dump("DB error: " + e.getMessage());
         }
     }

@@ -3,9 +3,10 @@ package cz.ceskydj.netherwater.database;
 public enum WaterSource {
     BUCKET("bucket"),
     ICE("ice"),
-    DISPENSER("dispenser");
+    DISPENSER("dispenser"),
+    WORLD_EDIT("world-edit");
 
-    private String name;
+    private final String name;
 
     WaterSource(String name) {
         this.name = name;
