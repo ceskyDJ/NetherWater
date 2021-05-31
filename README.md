@@ -16,7 +16,7 @@ set by the plugin. For more information see "Permissions" and "Default configura
 - [WorldEdit](https://enginehub.org/worldedit/) (optional) - if you use WorldEdit, world changes are linked to this
   plugin (creating or deleting water blocks)
 - [WorldGuard](https://enginehub.org/worldguard/) (optional) - if you need to integrate its protection system
-- [BKCommonLib](https://www.spigotmc.org/resources/bkcommonlib.39590/) (optional) - for modifying mobs' behaviour
+- [BKCommonLib](https://www.spigotmc.org/resources/bkcommonlib.39590/) (optional) - need for damaging mobs feature
 
 These are only NetherWater's direct dependencies! For the right functionality
 you need some other plugins (for example WorldEdit for WorldGuard). Read dependency
