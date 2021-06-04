@@ -3,6 +3,7 @@ package cz.ceskydj.netherwater.database;
 import cz.ceskydj.netherwater.NetherWater;
 import cz.ceskydj.netherwater.managers.MessageManager;
 import org.bukkit.ChatColor;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 
 import java.io.File;
@@ -218,7 +219,13 @@ public class DB {
             ResultSet resultSet = query.executeQuery(sql);
 
             while (resultSet.next()) {
-                blocks.add(this.createBlockFromResultSet(resultSet));
+                Block block;
+                if ((block = this.createBlockFromResultSet(resultSet)) == null) {
+                    // Block cannot be loaded by Bukkit wrapper (invalid world, coords etc.)
+                    continue;
+                }
+
+                blocks.add(block);
             }
         } catch (SQLException e) {
             this.messageManager.dump("DB error: " + e.getMessage());
@@ -239,7 +246,13 @@ public class DB {
             ResultSet resultSet = query.executeQuery();
 
             while (resultSet.next()) {
-                blocks.add(this.createBlockFromResultSet(resultSet));
+                Block block;
+                if ((block = this.createBlockFromResultSet(resultSet)) == null) {
+                    // Block cannot be loaded by Bukkit wrapper (invalid world, coords etc.)
+                    continue;
+                }
+
+                blocks.add(block);
             }
         } catch (SQLException e) {
             this.messageManager.dump("DB error: " + e.getMessage());
@@ -255,7 +268,14 @@ public class DB {
             int y = resultSet.getInt("y");
             int z = resultSet.getInt("z");
 
-            return Objects.requireNonNull(this.plugin.getServer().getWorld(world)).getBlockAt(x, y, z);
+            World bukkitWorld;
+            if ((bukkitWorld = this.plugin.getServer().getWorld(world)) == null) {
+                this.messageManager.dump("Unloaded or removed world '" + world + "' detected. Ignoring...");
+
+                return null;
+            }
+
+            return bukkitWorld.getBlockAt(x, y, z);
         } catch (SQLException e) {
             this.messageManager.dump("DB error: " + e.getMessage());
 
