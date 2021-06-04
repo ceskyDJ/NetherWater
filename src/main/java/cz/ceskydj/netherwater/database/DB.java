@@ -2,7 +2,6 @@ package cz.ceskydj.netherwater.database;
 
 import com.onarandombox.MultiverseCore.MultiverseCore;
 import com.onarandombox.MultiverseCore.api.MVWorldManager;
-import com.onarandombox.MultiverseCore.api.MultiverseWorld;
 import cz.ceskydj.netherwater.NetherWater;
 import cz.ceskydj.netherwater.managers.MessageManager;
 import org.bukkit.World;
@@ -175,8 +174,8 @@ public class DB {
         }
     }
 
-    public void deleteWaterBlock(int x, int y, int z) {
-        String sql = "DELETE FROM `water_blocks` WHERE `x` = ? AND `y` = ? AND `z` = ?";
+    public void deleteWaterBlock(int x, int y, int z, String world) {
+        String sql = "DELETE FROM `water_blocks` WHERE `x` = ? AND `y` = ? AND `z` = ? AND `world` = ?";
 
         try {
             PreparedStatement query = this.connection.prepareStatement(sql);
@@ -184,6 +183,7 @@ public class DB {
             query.setInt(1, x);
             query.setInt(2, y);
             query.setInt(3, z);
+            query.setString(4, world);
 
             query.executeUpdate();
         } catch (SQLException e) {
@@ -192,7 +192,7 @@ public class DB {
     }
 
     public void deleteWaterBlock(Block block) {
-        this.deleteWaterBlock(block.getX(), block.getY(), block.getZ());
+        this.deleteWaterBlock(block.getX(), block.getY(), block.getZ(), block.getWorld().getName());
     }
 
     public void deleteMultipleWaterBlocks(List<Block> blocks) {
@@ -279,7 +279,7 @@ public class DB {
                 if (this.inspectInvalidWorld(world)) {
                     this.messageManager.dump("Block from non-existing world found in DB, removing...");
 
-                    this.deleteWaterBlock(x, y, z);
+                    this.deleteWaterBlock(x, y, z, world);
                 } else {
                     this.messageManager.dump("Unloaded world by Multiverse-Core '" + world + "' detected. Ignoring...");
                 }
