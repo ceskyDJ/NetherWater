@@ -1,20 +1,21 @@
 package cz.ceskydj.netherwater.database;
 
+import com.onarandombox.MultiverseCore.MultiverseCore;
+import com.onarandombox.MultiverseCore.api.MVWorldManager;
+import com.onarandombox.MultiverseCore.api.MultiverseWorld;
 import cz.ceskydj.netherwater.NetherWater;
 import cz.ceskydj.netherwater.managers.MessageManager;
-import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 
-import java.io.File;
 import java.sql.*;
 import java.util.*;
 import java.util.Date;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class DB {
     private final NetherWater plugin;
     private final MessageManager messageManager;
+    private final MultiverseCore multiverseCore;
 
     private Connection connection = null;
 
@@ -22,6 +23,7 @@ public class DB {
         this.plugin = plugin;
 
         this.messageManager = plugin.getMessageManager();
+        this.multiverseCore = plugin.getMultiverseCore();
 
         this.connect(fileName);
         this.generateStructure();
@@ -173,20 +175,24 @@ public class DB {
         }
     }
 
-    public void deleteWaterBlock(Block block) {
+    public void deleteWaterBlock(int x, int y, int z) {
         String sql = "DELETE FROM `water_blocks` WHERE `x` = ? AND `y` = ? AND `z` = ?";
 
         try {
             PreparedStatement query = this.connection.prepareStatement(sql);
 
-            query.setInt(1, block.getX());
-            query.setInt(2, block.getY());
-            query.setInt(3, block.getZ());
+            query.setInt(1, x);
+            query.setInt(2, y);
+            query.setInt(3, z);
 
             query.executeUpdate();
         } catch (SQLException e) {
             this.messageManager.dump("DB error: " + e.getMessage());
         }
+    }
+
+    public void deleteWaterBlock(Block block) {
+        this.deleteWaterBlock(block.getX(), block.getY(), block.getZ());
     }
 
     public void deleteMultipleWaterBlocks(List<Block> blocks) {
@@ -270,7 +276,13 @@ public class DB {
 
             World bukkitWorld;
             if ((bukkitWorld = this.plugin.getServer().getWorld(world)) == null) {
-                this.messageManager.dump("Unloaded or removed world '" + world + "' detected. Ignoring...");
+                if (this.inspectInvalidWorld(world)) {
+                    this.messageManager.dump("Block from non-existing world found in DB, removing...");
+
+                    this.deleteWaterBlock(x, y, z);
+                } else {
+                    this.messageManager.dump("Unloaded world by Multiverse-Core '" + world + "' detected. Ignoring...");
+                }
 
                 return null;
             }
@@ -281,5 +293,24 @@ public class DB {
 
             return null;
         }
+    }
+
+    private boolean inspectInvalidWorld(String world) {
+        // There is no chance to detect if the world is just unloaded or removed completely,
+        // so its records will be removed for safety reasons (problems with these kind of worlds)
+        if (this.multiverseCore == null) {
+            return true;
+        }
+
+        MVWorldManager worldManager = this.multiverseCore.getMVWorldManager();
+
+        // World isn't a valid one or has already been removed
+        if (worldManager.isMVWorld(world)) {
+            return true;
+        }
+
+        // If the world isn't exists, its records will be removed (true returned)
+        // In other cases, the world is unloaded, so no actions are required to do
+        return !worldManager.hasUnloadedWorld(world, true);
     }
 }

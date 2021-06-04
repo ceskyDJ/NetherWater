@@ -10,6 +10,7 @@ softdepend:
   - WorldEdit
   - WorldGuard
   - BKCommonLib
+  - Multiverse-Core
 
 commands:
   netherwater:
