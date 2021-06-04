@@ -67,6 +67,11 @@
             <id>MG-Dev Jenkins CI Maven Repository</id>
             <url>https://ci.mg-dev.eu/plugin/repository/everything/</url>
         </repository>
+
+        <repository>
+            <id>OnARandomBox</id>
+            <url>https://repo.onarandombox.com/content/groups/public/</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -116,6 +121,13 @@
             <groupId>com.bergerkiller.bukkit</groupId>
             <artifactId>BKCommonLib</artifactId>
             <version>1.16.4-v2</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.onarandombox.multiversecore</groupId>
+            <artifactId>Multiverse-Core</artifactId>
+            <version>4.1.0</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

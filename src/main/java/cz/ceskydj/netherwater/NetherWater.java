@@ -1,6 +1,7 @@
 package cz.ceskydj.netherwater;
 
 import com.bergerkiller.bukkit.common.internal.CommonPlugin;
+import com.onarandombox.MultiverseCore.MultiverseCore;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import cz.ceskydj.netherwater.commands.BaseCommand;
@@ -32,6 +33,7 @@ public class NetherWater extends JavaPlugin {
 
     private WorldGuardPlugin worldGuard = null;
     private WorldEditPlugin worldEdit = null;
+    private MultiverseCore multiverseCore = null;
 
     private ConfigManager configManager;
     private MessageManager messageManager;
@@ -67,6 +69,14 @@ public class NetherWater extends JavaPlugin {
             this.messageManager.consoleMessage("World Edit has been found and registered.", ChatColor.GREEN);
         } catch (PluginNotFoundException e) {
             this.messageManager.consoleMessage("World Guard hasn't been found. Some functionality won't be activated.");
+        }
+
+        // Load Multiverse-Core
+        try {
+            this.multiverseCore = this.loadMultiverseCore();
+            this.messageManager.consoleMessage("Multiverse-Core has been found and registered.", ChatColor.GREEN);
+        } catch(PluginNotFoundException e) {
+            this.messageManager.consoleMessage("Multiverse-Core hasn't been found. Some functionality won't be activated.");
         }
 
         PluginManager pluginManager = this.getServer().getPluginManager();
@@ -157,6 +167,16 @@ public class NetherWater extends JavaPlugin {
         return (WorldEditPlugin) plugin;
     }
 
+    private MultiverseCore loadMultiverseCore() throws PluginNotFoundException {
+        Plugin plugin = this.getServer().getPluginManager().getPlugin("Multiverse-Core");
+
+        if (!(plugin instanceof MultiverseCore)) {
+            throw new PluginNotFoundException("Plugin Multiverse-Core hasn't been found.");
+        }
+
+        return (MultiverseCore) plugin;
+    }
+
     public ConfigManager getConfigManager() {
         return this.configManager;
     }
@@ -183,6 +203,10 @@ public class NetherWater extends JavaPlugin {
 
     public WorldEditChangesStorage getWorldEditChangesStorage() {
         return this.worldEditChangesStorage;
+    }
+
+    public MultiverseCore getMultiverseCore() {
+        return this.multiverseCore;
     }
 
     public Player getClosestPlayer(org.bukkit.Location location) {
