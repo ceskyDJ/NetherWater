@@ -17,6 +17,8 @@ set by the plugin. For more information see "Permissions" and "Default configura
   plugin (creating or deleting water blocks)
 - [WorldGuard](https://enginehub.org/worldguard/) (optional) - if you need to integrate its protection system
 - [BKCommonLib](https://www.spigotmc.org/resources/bkcommonlib.39590/) (optional) - need for damaging mobs feature
+- [Multiverse-Core](https://www.spigotmc.org/resources/multiverse-core.64450/) (optional) - worlds unloaded by
+  Multiverse-Core is supported by this plugin
 
 These are only NetherWater's direct dependencies! For the right functionality
 you need some other plugins (for example WorldEdit for WorldGuard). Read dependency
