@@ -59,6 +59,10 @@ Statistics are provided by [BStats](https://bstats.org/plugin/bukkit/Nether%20Wa
 ![BStats statistics](https://bstats.org/signatures/bukkit/Nether%20Water.svg "BStats statistics - how many servers and players use the plugin")
 
 ## Default configuration
+
+Never use `debug: true` when you are running plugin on a public and/or production server! Console messages are slow,
+so your server will be slowed down, and it could crash in some situations (bigger WorldEdit operation etc.).
+
 ```YAML
 #--------------------------------------------------------------------------------------------
 #     _   _          _     _                      __        __          _
