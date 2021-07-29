@@ -29,7 +29,13 @@ public class WaterAnimationAgent implements Runnable {
 
         this.messageManager.dump(blocks.size() + " will be animated");
 
+        Set<Block> nonWaterBlocks = new LinkedHashSet<>();
         blocks.forEach(block -> {
+            if (block.getType() != Material.WATER) {
+                nonWaterBlocks.add(block);
+                return;
+            }
+
             // Only generate animation for top-level water blocks with air above them
             Material upperBlockType = block.getRelative(BlockFace.UP).getType();
             if (upperBlockType != Material.AIR && upperBlockType != Material.CAVE_AIR) {
@@ -38,5 +44,7 @@ public class WaterAnimationAgent implements Runnable {
 
             block.getWorld().playEffect(block.getLocation(), Effect.SMOKE, 1);
         });
+
+        this.db.deleteMultipleWaterBlocks(nonWaterBlocks);
     }
 }
