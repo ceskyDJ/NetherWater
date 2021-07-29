@@ -11,6 +11,7 @@ import org.bukkit.block.BlockFace;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class WaterAnimationAgent implements Runnable {
     private final MessageManager messageManager;
@@ -27,9 +28,8 @@ public class WaterAnimationAgent implements Runnable {
 
         List<Block> blocks = this.db.getAllWaterBlocks();
 
-        this.messageManager.dump(blocks.size() + " will be animated");
-
         Set<Block> nonWaterBlocks = new LinkedHashSet<>();
+        AtomicInteger animated = new AtomicInteger();
         blocks.forEach(block -> {
             if (block.getType() != Material.WATER) {
                 nonWaterBlocks.add(block);
@@ -43,7 +43,10 @@ public class WaterAnimationAgent implements Runnable {
             }
 
             block.getWorld().playEffect(block.getLocation(), Effect.SMOKE, 1);
+            animated.getAndIncrement();
         });
+
+        this.messageManager.dump(animated + " water blocks has been animated");
 
         this.db.deleteMultipleWaterBlocks(nonWaterBlocks);
     }
