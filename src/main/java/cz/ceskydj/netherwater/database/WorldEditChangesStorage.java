@@ -5,21 +5,32 @@ import org.bukkit.block.Block;
 import java.util.*;
 
 public class WorldEditChangesStorage {
-    private final List<Block> savedBlockChanges;
+    private final Set<Block> addedWaterBlocks;
+    private final Set<Block> removedWaterBlocks;
 
     public WorldEditChangesStorage() {
-        this.savedBlockChanges = new ArrayList<>();
+        this.addedWaterBlocks = new LinkedHashSet<>();
+        this.removedWaterBlocks = new LinkedHashSet<>();
     }
 
-    public List<Block> getBlockChanges() {
-        return this.savedBlockChanges;
+    public void addWaterBlock(Block block) {
+        this.addedWaterBlocks.add(block);
     }
 
-    public void addBlockChange(Block block) {
-        this.savedBlockChanges.add(block);
+    public void removeWaterBlock(Block block) {
+        this.removedWaterBlocks.add(block);
     }
 
     public void clearBlockChanges() {
-        this.savedBlockChanges.clear();
+        this.addedWaterBlocks.clear();
+        this.removedWaterBlocks.clear();
+    }
+
+    public Set<Block> getAddedWaterBlocks() {
+        return this.addedWaterBlocks;
+    }
+
+    public Set<Block> getRemovedWaterBlocks() {
+        return this.removedWaterBlocks;
     }
 }

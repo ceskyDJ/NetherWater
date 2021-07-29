@@ -153,7 +153,7 @@ public class DB {
         }
     }
 
-    public void insertMultipleWaterBlocks(List<Block> blocks, WaterSource from, boolean disappear) {
+    public void insertMultipleWaterBlocks(Collection<Block> blocks, WaterSource from, boolean disappear) {
         try {
             this.connection.setAutoCommit(false);
 
@@ -195,7 +195,7 @@ public class DB {
         this.deleteWaterBlock(block.getX(), block.getY(), block.getZ(), block.getWorld().getName());
     }
 
-    public void deleteMultipleWaterBlocks(List<Block> blocks) {
+    public void deleteMultipleWaterBlocks(Collection<Block> blocks) {
         try {
             this.connection.setAutoCommit(false);
 
