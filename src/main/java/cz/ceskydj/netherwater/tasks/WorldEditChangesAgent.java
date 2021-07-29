@@ -5,13 +5,9 @@ import cz.ceskydj.netherwater.database.DB;
 import cz.ceskydj.netherwater.database.WaterSource;
 import cz.ceskydj.netherwater.database.WorldEditChangesStorage;
 import cz.ceskydj.netherwater.managers.MessageManager;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 
 import java.util.*;
-
-import static java.util.stream.Collectors.collectingAndThen;
-import static java.util.stream.Collectors.toCollection;
 
 public class WorldEditChangesAgent implements Runnable {
     private final DB db;
@@ -28,31 +24,18 @@ public class WorldEditChangesAgent implements Runnable {
     public void run() {
         this.messageManager.dump("Checking for WorldEdit changes...");
 
-        List<Block> cachedBlocks = worldEditChangesStorage.getBlockChanges();
-
-        Comparator<Block> comparator = Comparator.comparing(
-                Block::getLocation, (loc1, loc2) -> loc1.toVector().equals(loc2.toVector()) ? 0 : 1
-        );
-        cachedBlocks = cachedBlocks.stream().collect(collectingAndThen(toCollection(() -> new TreeSet<>(comparator)),
-                        ArrayList::new));
+        Set<Block> addedBlocks = this.worldEditChangesStorage.getAddedWaterBlocks();
+        Set<Block> removedBlocks = this.worldEditChangesStorage.getRemovedWaterBlocks();
 
         // There is no changes to process
-        if (cachedBlocks.isEmpty()) {
+        if (addedBlocks.isEmpty() && removedBlocks.isEmpty()) {
             return;
         }
 
-        this.messageManager.dump("Found " + cachedBlocks.size() + " WorldEdit changes.");
+        this.messageManager.dump("Found " + (addedBlocks.size() + removedBlocks.size()) + " WorldEdit changes.");
 
-        List<Block> forDeletions = new ArrayList<>();
-        cachedBlocks.forEach(block -> {
-            if (block.getBlockData().getMaterial() != Material.WATER) {
-                forDeletions.add(block);
-            }
-        });
-        cachedBlocks.removeAll(forDeletions);
-
-        this.db.deleteMultipleWaterBlocks(forDeletions);
-        this.db.insertMultipleWaterBlocks(cachedBlocks, WaterSource.WORLD_EDIT, false);
+        this.db.deleteMultipleWaterBlocks(removedBlocks);
+        this.db.insertMultipleWaterBlocks(addedBlocks, WaterSource.WORLD_EDIT, false);
 
         this.worldEditChangesStorage.clearBlockChanges();
     }
