@@ -38,7 +38,13 @@ public class WaterPlaceListener implements Listener {
     public void onPlayerInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
         ItemStack usedItem = event.getItem();
-        Block selectedBlock = event.getClickedBlock().getRelative(event.getBlockFace());
+        Block eventBlock = event.getClickedBlock();
+        Block selectedBlock = null;
+        if (eventBlock != null) {
+            selectedBlock = eventBlock.getRelative(event.getBlockFace());
+        } else {
+            return;
+        }
 
         this.messageManager.dump("Player interact event has been handled.");
         this.messageManager.dump("- Action: " + event.getAction());
@@ -51,6 +57,12 @@ public class WaterPlaceListener implements Listener {
         }
 
         if (usedItem == null || usedItem.getType() != Material.WATER_BUCKET) {
+            return;
+        }
+
+        // FIX: cauldrons could be normally used in nether and this event is for placing water,
+        // not for inserting, so it needs an exception
+        if (eventBlock.getType() == Material.CAULDRON) {
             return;
         }
 
