@@ -54,7 +54,10 @@ permissions:
     description: Allows players to scoop water into bucket
     default: false
   netherwater.disappearing.bypass:
-    description: Disables automatic water disappearing for players
+    description: Disables automatic water disappearing (AND cauldron drying) for players
+    default: false
+  netherwater.drying.bypass:
+    description: Disable automatic cauldron drying (NOT water disappearing) for players
     default: false
 
   netherwater.command.*:

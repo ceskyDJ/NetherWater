@@ -53,12 +53,20 @@ public class ConfigManager {
         return !this.configManipulator.getBoolean("infinite-sources");
     }
 
-    public boolean isWaterDisappearingEnabled() {
-        return this.configManipulator.getInt("water-disappearing") != 0;
-    }
-
     public int getWaterDisappearingTime() {
         return this.configManipulator.getInt("water-disappearing");
+    }
+
+    public int getCauldronDryingTime() {
+        return this.configManipulator.getInt("cauldron-drying");
+    }
+
+    public boolean isWaterDisappearingEnabled() {
+        return this.getWaterDisappearingTime() != 0;
+    }
+
+    public boolean isCauldronDryingEnabled() {
+        return isWaterDisappearingEnabled() && this.getCauldronDryingTime() != 0;
     }
 
     public boolean isMobDamagingEnabled() {

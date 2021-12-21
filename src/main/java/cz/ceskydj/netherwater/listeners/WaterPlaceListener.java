@@ -104,7 +104,10 @@ public class WaterPlaceListener implements Listener {
         // FIX: cauldrons could be normally used in nether and this event is for placing water,
         // not for inserting, so it needs an exception
         if (eventBlock.getType() == Material.CAULDRON) {
-            this.db.insertWaterBlock(eventBlock, WaterSource.BUCKET, false);
+            // If the player has bypass permission, the cauldron won't dry
+            boolean dry = !player.hasPermission("netherwater.disappearing.bypass")
+                    && !player.hasPermission("netherwater.drying.bypass");
+            this.db.insertWaterBlock(eventBlock, WaterSource.BUCKET, dry);
 
             return;
         }

@@ -41,7 +41,8 @@ some NetherWater's functionality will be turned off.
 - **netherwater.world.bypass** - turn on plugin features in disabled worlds for some players
 - **netherwater.spread.bypass** - disable spread limits for some players - **needs to allow this feature in config file!**
 - **netherwater.scooping.bypass** - allow scooping water into buckets for some players
-- **netherwater.disappearing.bypass** - turn off water disappearing for some players
+- **netherwater.disappearing.bypass** - turn off water disappearing for some players (INCLUDES cauldron drying)
+- **netherwater.drying.bypass** - turn off cauldron drying for some players (NOT water disappearing at all)
 - **netherwater.bypass** - all bypasses in one permission
 
 ### Commands
@@ -84,7 +85,7 @@ max-height: 999
 min-height: 0
 # You can disable water spread behaviour by setting this to false
 # OP players and others with netherwater.spread.bypass permission still can have normal water spread
-# To setup this change spread-bypass to true and eventually add netherwater.spread.bypass permission for target players
+# To set up this change spread-bypass to true and eventually add netherwater.spread.bypass permission for target players
 spread-enabled: true
 # Spread limits bypass for OP players or players with netherwater.spread.bypass permission
 spread-bypass: false
@@ -96,11 +97,16 @@ infinite-sources: false
 # Set this property to 0 if you want to disable this behaviour
 # You need to reload or restart server to apply change of this property
 water-disappearing: 30
-# Damage mobs in water in nether worlds (excluding underwater mobs - https://minecraft.fandom.com/wiki/Category:Underwater_Mobs)
+# Similar to `water-disappearing` option but for water stored in cauldrons
+# This needs a water disappearing to be enabled (set to non-zero value)
+# Warning: Cauldrons dry gradually (like if you grab water with glass bottles)
+cauldron-drying: 0
+# Damage mobs in water in nether worlds
+# Aquatic mobs are excluded (https://minecraft.fandom.com/wiki/Aquatic)
 mob-damaging: true
 # Damage players in water in nether worlds (only survival mode players without god mode enabled)
 player-damaging: true
-# How many health point remove while damaging mobs and players
+# How much health point remove while damaging mobs and players
 # Mobs and players are hit every 20 ticks (usually ~ 1 second)
 # For example: player has 20 health points (10 hearts)
 damage-value:
