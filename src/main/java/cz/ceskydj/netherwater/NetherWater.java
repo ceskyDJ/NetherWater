@@ -109,18 +109,22 @@ public class NetherWater extends JavaPlugin {
         // Water disappearing
         if (this.configManager.isWaterDisappearingEnabled()) {
             scheduler.scheduleSyncRepeatingTask(this, new WaterDisappearingAgent(this), 0L, 200L);
+            this.messageManager.dump("Water disappearing agent has been activated");
         }
         // Water animation
         if (this.configManager.isWaterAnimationEnabled()) {
             scheduler.scheduleSyncRepeatingTask(this, new WaterAnimationAgent(this), 0L, 60L);
+            this.messageManager.dump("Water animating agent has been activated");
         }
         // Mob damaging
         if (this.configManager.isMobDamagingEnabled() || this.configManager.isPlayerDamagingEnabled()) {
             scheduler.scheduleSyncRepeatingTask(this, new MobDamagingAgent(this), 0L, 20L);
+            this.messageManager.dump("Mob damaging agent has been activated");
         }
         // WorldEdit changes batch parser
         if (this.worldEdit != null) {
             scheduler.scheduleSyncRepeatingTask(this, new WorldEditChangesAgent(this), 0L, 20L);
+            this.messageManager.dump("WorldEdit changes agent has been activated");
         }
 
         MetricsLite metricsLite = new MetricsLite(this, this.bStatsPluginId);

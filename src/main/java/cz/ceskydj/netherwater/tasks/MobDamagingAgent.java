@@ -42,7 +42,7 @@ public class MobDamagingAgent implements Runnable {
             Block block = entity.getLocation().getBlock();
 
             // The mob must be in the water
-            // Mobs outside of the water are at the save place, so there is no reason to damage them
+            // Mobs outside the water are at the save place, so there is no reason to damage them
             if (block.getType() == Material.WATER) {
                 double damageValue = entity instanceof Player
                         ? this.configManager.getPlayerDamageValue()
