@@ -6,6 +6,7 @@ import cz.ceskydj.netherwater.managers.ConfigManager;
 import cz.ceskydj.netherwater.managers.MessageManager;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.data.Levelled;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByBlockEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -40,10 +41,12 @@ public class MobDamagingAgent implements Runnable {
 
             // Block the mob is standing on
             Block block = entity.getLocation().getBlock();
+            String blockType = block.getType().toString();
 
             // The mob must be in the water
             // Mobs outside the water are at the save place, so there is no reason to damage them
-            if (block.getType() == Material.WATER) {
+            if (block.getType() == Material.WATER
+                    || (blockType.contains("CAULDRON") && block.getBlockData() instanceof Levelled)) {
                 double damageValue = entity instanceof Player
                         ? this.configManager.getPlayerDamageValue()
                         : this.configManager.getMobDamageValue();

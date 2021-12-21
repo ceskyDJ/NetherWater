@@ -9,6 +9,7 @@ import org.bouncycastle.util.Arrays;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.block.data.Levelled;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Fish;
@@ -65,7 +66,12 @@ public class MobMoveListener implements Listener {
             return;
         }
 
-        if (block.getType() != Material.WATER) {
+        String blockType = block.getType().toString();
+        if (block.getType() != Material.WATER && !blockType.contains("CAULDRON")) {
+            return;
+        }
+
+        if (blockType.contains("CAULDRON") && !(block.getBlockData() instanceof Levelled)) {
             return;
         }
 
