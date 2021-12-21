@@ -84,7 +84,7 @@ public class DB {
             // It's OK, there is nothing to change
             return;
         } catch (SQLException e) {
-            this.messageManager.dump("DB error: " + e.getMessage());
+            this.messageManager.dump("Column `disappear` is missing in DB");
         }
 
         // Disappear column is missing

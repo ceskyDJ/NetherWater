@@ -28,13 +28,19 @@ public class WaterReplaceListener implements Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
-        Block selectedBlock = event.getClickedBlock().getRelative(event.getBlockFace());
+        Block eventBlock = event.getClickedBlock();
+        Block selectedBlock;
+        if (eventBlock != null) {
+            selectedBlock = eventBlock.getRelative(event.getBlockFace());
+        } else {
+            return;
+        }
 
         if (event.getAction() != Action.RIGHT_CLICK_BLOCK) {
             return;
         }
 
-        if (selectedBlock.getType() != Material.WATER) {
+        if (selectedBlock.getType() != Material.WATER && eventBlock.getType() != Material.CAULDRON) {
             return;
         }
 

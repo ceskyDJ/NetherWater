@@ -7,6 +7,8 @@ import org.bukkit.Effect;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.data.Levelled;
+import org.bukkit.material.Cauldron;
 
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -31,8 +33,18 @@ public class WaterAnimationAgent implements Runnable {
         Set<Block> nonWaterBlocks = new LinkedHashSet<>();
         AtomicInteger animated = new AtomicInteger();
         blocks.forEach(block -> {
-            if (block.getType() != Material.WATER) {
+            String blockType = block.getType().toString();
+            // Comparing string due to compatibility issues
+            if (block.getType() != Material.WATER && !blockType.contains("CAULDRON")) {
                 nonWaterBlocks.add(block);
+                this.messageManager.dump("Deleting block " + block + " due to type (" + block.getType() + ")");
+                return;
+            }
+
+            // If it's a cauldron, it must be filled with water (empty abd lava cauldron aren't levelled)
+            if (blockType.contains("CAULDRON") && !(block.getBlockData() instanceof Levelled)) {
+                nonWaterBlocks.add(block);
+                this.messageManager.dump("Deleting block " + block + " due to level");
                 return;
             }
 

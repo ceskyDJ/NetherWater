@@ -40,7 +40,7 @@ public class BlockBreakListener implements Listener {
         this.messageManager.dump("- World: " + Objects.requireNonNull(block).getWorld().getName() + " (type: " + event.getBlock().getWorld().getEnvironment() + ")");
         this.messageManager.dump("- Player: " + player);
 
-        if (block.getType() != Material.ICE) {
+        if (block.getType() != Material.ICE && block.getType() != Material.CAULDRON) {
             return;
         }
 
@@ -56,6 +56,13 @@ public class BlockBreakListener implements Listener {
 
         // Check general conditions for using this plugin (world type, player permissions, world height etc.)
         if (!this.permissionManager.canBeUsedThisPlugin(player, block)) {
+            return;
+        }
+
+        // Special behaviour for cauldrons
+        if (block.getType() == Material.CAULDRON) {
+            this.db.deleteWaterBlock(block);
+
             return;
         }
 
