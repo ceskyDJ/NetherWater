@@ -5,7 +5,7 @@ author: ceskyDJ
 
 main: cz.ceskydj.netherwater.NetherWater
 database: true
-api-version: "1.15"
+api-version: "1.13"
 softdepend:
   - WorldEdit
   - WorldGuard
@@ -44,6 +44,7 @@ permissions:
       netherwater.spread.bypass: true
       netherwater.scooping.bypass: true
       netherwater.disappearing.bypass: true
+      netherwater.drying.bypass: true
   netherwater.world.bypass:
     description: Allows players to bypass the disabled worlds and place water
     default: op

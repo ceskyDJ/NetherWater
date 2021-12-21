@@ -1,10 +1,8 @@
 package cz.ceskydj.netherwater.exceptions;
 
-import java.security.PrivilegedActionException;
-
+@SuppressWarnings("unused")
 public class MissingPermissionException extends Exception {
-    public MissingPermissionException() {
-    }
+    public MissingPermissionException() {}
 
     public MissingPermissionException(String message) {
         super(message);

@@ -16,15 +16,12 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 public class WaterScoopListener implements Listener {
-    private final NetherWater plugin;
     private final ConfigManager configManager;
     private final MessageManager messageManager;
     private final DB db;
     private final PermissionManager permissionManager;
 
     public WaterScoopListener(NetherWater plugin) {
-        this.plugin = plugin;
-
         this.configManager = plugin.getConfigManager();
         this.messageManager = plugin.getMessageManager();
         this.db = plugin.getDatabaseWrapper();
@@ -42,7 +39,12 @@ public class WaterScoopListener implements Listener {
         }
 
         Player player = event.getPlayer();
-        Block selectedBlock = event.getClickedBlock().getRelative(event.getBlockFace());
+        Block selectedBlock;
+        if (event.getClickedBlock() != null) {
+            selectedBlock = event.getClickedBlock().getRelative(event.getBlockFace());
+        } else {
+            return;
+        }
 
         if (selectedBlock.getType() != Material.WATER) {
             return;

@@ -52,7 +52,7 @@ public class MessageManager {
         this.sendMessage(console, messageName, null);
     }
 
-    public void sendMessage(ConsoleCommandSender console, String messageName, Map<String, String> variables) {
+    public void sendMessage(ConsoleCommandSender ignoredConsole, String messageName, Map<String, String> variables) {
         this.consoleMessage(this.prepareMessage(messageName, variables));
     }
 

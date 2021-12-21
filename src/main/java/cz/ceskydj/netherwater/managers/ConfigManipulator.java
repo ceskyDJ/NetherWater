@@ -4,7 +4,6 @@ import cz.ceskydj.netherwater.NetherWater;
 import de.leonhard.storage.Config;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
-import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
@@ -18,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+@SuppressWarnings("unused")
 public class ConfigManipulator {
     private final NetherWater plugin;
     private final MessageManager messageManager;
@@ -160,12 +160,6 @@ public class ConfigManipulator {
 
     public ItemStack getItemStack(String key) {
         ItemStack defaultValue = this.defaultConfig.getItemStack(key);
-
-        return this.configData.getOrDefault(key, defaultValue);
-    }
-
-    public Location getLocation(String key) {
-        Location defaultValue = this.defaultConfig.getLocation(key);
 
         return this.configData.getOrDefault(key, defaultValue);
     }

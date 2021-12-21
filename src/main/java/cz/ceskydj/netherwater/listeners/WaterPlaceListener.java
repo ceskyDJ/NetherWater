@@ -21,7 +21,6 @@ import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionType;
 
 import java.util.Objects;
-import java.util.logging.Level;
 
 public class WaterPlaceListener implements Listener {
     private final MessageManager messageManager;

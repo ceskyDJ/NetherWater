@@ -3,7 +3,7 @@ package cz.ceskydj.netherwater.managers;
 import java.util.List;
 
 public class ConfigManager {
-    private ConfigManipulator configManipulator;
+    private final ConfigManipulator configManipulator;
 
     public ConfigManager(ConfigManipulator configManipulator) {
         this.configManipulator = configManipulator;

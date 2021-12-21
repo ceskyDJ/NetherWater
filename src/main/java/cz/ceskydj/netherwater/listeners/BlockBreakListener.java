@@ -18,14 +18,11 @@ import org.bukkit.event.block.BlockBreakEvent;
 import java.util.Objects;
 
 public class BlockBreakListener implements Listener {
-    private final NetherWater plugin;
     private final MessageManager messageManager;
     private final DB db;
     private final PermissionManager permissionManager;
 
     public BlockBreakListener(NetherWater plugin) {
-        this.plugin = plugin;
-
         this.messageManager = plugin.getMessageManager();
         this.db = plugin.getDatabaseWrapper();
         this.permissionManager = plugin.getPermissionManager();

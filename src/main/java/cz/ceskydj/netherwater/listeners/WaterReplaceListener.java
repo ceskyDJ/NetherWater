@@ -11,16 +11,12 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.ItemStack;
 
 public class WaterReplaceListener implements Listener {
-    private final NetherWater plugin;
     private final DB db;
     private final PermissionManager permissionManager;
 
     public WaterReplaceListener(NetherWater plugin) {
-        this.plugin = plugin;
-
         this.db = plugin.getDatabaseWrapper();
         this.permissionManager = plugin.getPermissionManager();
     }

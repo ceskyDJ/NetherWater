@@ -8,7 +8,6 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Levelled;
-import org.bukkit.material.Cauldron;
 
 import java.util.LinkedHashSet;
 import java.util.List;

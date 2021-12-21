@@ -15,13 +15,10 @@ import org.bukkit.event.block.BlockFromToEvent;
 import org.bukkit.event.block.FluidLevelChangeEvent;
 
 public class WaterCreateListener implements Listener {
-    private final NetherWater plugin;
     private final ConfigManager configManager;
     private final MessageManager messageManager;
 
     public WaterCreateListener(NetherWater plugin) {
-        this.plugin = plugin;
-
         this.configManager = plugin.getConfigManager();
         this.messageManager = plugin.getMessageManager();
     }

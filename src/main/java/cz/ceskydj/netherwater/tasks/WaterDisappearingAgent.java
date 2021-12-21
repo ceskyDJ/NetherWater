@@ -74,7 +74,6 @@ public class WaterDisappearingAgent implements Runnable {
 
             if (blockType.contains("CAULDRON") && block.getBlockData() instanceof Levelled) {
                 Levelled water_level = (Levelled) block.getBlockData();
-
                 if (water_level.getLevel() == 1) {
                     // There is the last bit of water --> empty cauldron completely
                     block.setType(Material.CAULDRON);

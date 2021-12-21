@@ -1,5 +1,6 @@
 package cz.ceskydj.netherwater.exceptions;
 
+@SuppressWarnings("unused")
 public class PluginNotFoundException extends Exception {
     public PluginNotFoundException() {
         super();

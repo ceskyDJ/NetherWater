@@ -5,25 +5,17 @@ import cz.ceskydj.netherwater.NetherWater;
 import cz.ceskydj.netherwater.database.EntityStorage;
 import cz.ceskydj.netherwater.managers.ConfigManager;
 import cz.ceskydj.netherwater.managers.MessageManager;
-import org.bouncycastle.util.Arrays;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.Levelled;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Fish;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageByBlockEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntityEnterBlockEvent;
-import org.bukkit.event.entity.EntityToggleSwimEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
-
-import java.util.Objects;
 
 public class MobMoveListener implements Listener {
     private final MessageManager messageManager;

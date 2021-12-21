@@ -46,7 +46,7 @@ public class WaterDispenseListener implements Listener {
         this.messageManager.dump("- Block: " + block.getType().name());
         this.messageManager.dump("- Block's metadata: " + block.getBlockData().getAsString(true));
         this.messageManager.dump("- Item: " + item.getType().name());
-        this.messageManager.dump("- Item's metadata: " + item.getItemMeta().toString());
+        this.messageManager.dump("- Item's metadata: " + item.getItemMeta());
 
         if (block.getType() != Material.DISPENSER) {
             return;
@@ -75,12 +75,9 @@ public class WaterDispenseListener implements Listener {
             Dispenser dispenser = (Dispenser) block.getState();
             Inventory inventory = dispenser.getInventory();
 
-            Bukkit.getScheduler().scheduleSyncDelayedTask(this.plugin, new Runnable() {
-                @Override
-                public void run() {
-                    int bucketPosition = inventory.first(Material.WATER_BUCKET);
-                    inventory.setItem(bucketPosition, new ItemStack(Material.BUCKET));
-                }
+            Bukkit.getScheduler().scheduleSyncDelayedTask(this.plugin, () -> {
+                int bucketPosition = inventory.first(Material.WATER_BUCKET);
+                inventory.setItem(bucketPosition, new ItemStack(Material.BUCKET));
             });
 
             // If the player has bypass permission, the water block won't disappear
