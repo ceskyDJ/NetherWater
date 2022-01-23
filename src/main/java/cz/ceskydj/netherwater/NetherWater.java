@@ -20,13 +20,16 @@ import cz.ceskydj.netherwater.tasks.WaterDisappearingAgent;
 import cz.ceskydj.netherwater.tasks.WorldEditChangesAgent;
 import cz.ceskydj.netherwater.updater.UpdateChecker;
 import org.bstats.bukkit.MetricsLite;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
+
+import java.util.List;
+import java.util.Objects;
 
 public class NetherWater extends JavaPlugin {
     private final int bStatsPluginId = 8833;
@@ -81,12 +84,14 @@ public class NetherWater extends JavaPlugin {
 
         PluginManager pluginManager = this.getServer().getPluginManager();
         pluginManager.registerEvents(new WaterPlaceListener(this), this);
-        pluginManager.registerEvents(new BlockBreakListener(this), this);
+        pluginManager.registerEvents(new IceBreakListener(this), this);
         pluginManager.registerEvents(new WaterFlowListener(this), this);
         pluginManager.registerEvents(new WaterScoopListener(this), this);
         pluginManager.registerEvents(new WaterCreateListener(this), this);
         pluginManager.registerEvents(new WaterDispenseListener(this), this);
         pluginManager.registerEvents(new WaterReplaceListener(this), this);
+        pluginManager.registerEvents(new DispenserPlaceListener(this), this);
+        pluginManager.registerEvents(new BlockBreakListener(this), this);
 
         // Some listeners requires BKCommonLib
         if (this.isBKCommonLibInstalled()) {
@@ -215,19 +220,26 @@ public class NetherWater extends JavaPlugin {
         return this.multiverseCore;
     }
 
-    public Player getClosestPlayer(org.bukkit.Location location) {
-        // From https://gist.github.com/fourohfour/8243657
-        double closestDistance = Double.MAX_VALUE;
-        Player closestPlayer = null;
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            double distance = player.getLocation().distance(location);
-            if (closestDistance == Double.MAX_VALUE || distance < closestDistance) {
-                closestDistance = distance;
-                closestPlayer = player;
+    public Player getClosestPlayer(org.bukkit.Location baseLocation) {
+        World world = baseLocation.getWorld();
+        List<Player> playersInSameWorld = Objects.requireNonNull(world).getPlayers();
+
+        Player nearestPlayer = null;
+        double nearestDistance = Double.MAX_VALUE;
+        for (Player currentPlayer: playersInSameWorld) {
+            double currentDistance = currentPlayer.getLocation().distance(baseLocation);
+            if (nearestPlayer == null || currentDistance < nearestDistance) {
+                nearestPlayer = currentPlayer;
+                nearestDistance = currentDistance;
             }
         }
 
-        return closestPlayer;
+        // Player has to be very close to the place where the event occurred
+        if (nearestDistance > 10.0) {
+            return null;
+        }
+
+        return nearestPlayer;
     }
 
     private void checkForUpdates() {

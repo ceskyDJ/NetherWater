@@ -41,8 +41,11 @@ public class WaterFlowListener implements Listener {
 
         if (this.configManager.isSpreadBypassEnabled()) {
             Player player = this.plugin.getClosestPlayer(event.getToBlock().getLocation());
-            if (player.hasPermission("netherwater.spread.bypass")) {
-                return;
+            // There must be a player close to the event, otherwise there are no bypasses
+            if (player != null) {
+                if (player.hasPermission("netherwater.spread.bypass")) {
+                    return;
+                }
             }
         }
 

@@ -58,6 +58,11 @@ public class WaterDispenseListener implements Listener {
 
         // Check general conditions for using this plugin (world type, player permissions, world height etc.)
         Player player = this.plugin.getClosestPlayer(block.getLocation());
+        if (player == null) {
+            // TODO: Verify block owner's permissions
+            return;
+        }
+
         if (!this.permissionManager.canBeUsedThisPlugin(player, block)) {
             return;
         }
