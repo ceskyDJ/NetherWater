@@ -8,6 +8,7 @@ import cz.ceskydj.netherwater.managers.MessageManager;
 import cz.ceskydj.netherwater.managers.PermissionManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.Dispenser;
 import org.bukkit.block.data.Levelled;
@@ -39,14 +40,25 @@ public class WaterDispenseListener implements Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onBlockDispense(BlockDispenseEvent event) {
         Block block = event.getBlock();
+        World world = block.getWorld();
         ItemStack item = event.getItem();
 
+        boolean fromDb = false;
+        Player player = this.plugin.getClosestPlayer(block.getLocation());
+        if (player == null) {
+            // Works automatically without player (chunk loaded redstone circuit etc.)
+            // In this case, owner of the dispenser will be used
+            player = this.db.getDispenserOwner(block);
+            fromDb = true;
+        }
+
         this.messageManager.dump("Block dispense event has been handled.");
-        this.messageManager.dump("- World: " + block.getWorld().getName());
+        this.messageManager.dump("- World: " + world.getName());
         this.messageManager.dump("- Block: " + block.getType().name());
         this.messageManager.dump("- Block's metadata: " + block.getBlockData().getAsString(true));
         this.messageManager.dump("- Item: " + item.getType().name());
         this.messageManager.dump("- Item's metadata: " + item.getItemMeta());
+        this.messageManager.dump("- Responsible player: " + player + (fromDb ? "(from DB)" : ""));
 
         if (block.getType() != Material.DISPENSER) {
             return;
@@ -56,10 +68,15 @@ public class WaterDispenseListener implements Listener {
             return;
         }
 
-        // Check general conditions for using this plugin (world type, player permissions, world height etc.)
-        Player player = this.plugin.getClosestPlayer(block.getLocation());
+        if (world.getEnvironment() != org.bukkit.World.Environment.NETHER) {
+            return;
+        }
+
         if (player == null) {
-            // TODO: Verify block owner's permissions
+            if (!this.configManager.getDisabledWorlds().contains(world.getName())) {
+                event.setCancelled(true);
+            }
+
             return;
         }
 
