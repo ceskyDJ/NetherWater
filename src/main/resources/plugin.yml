@@ -1,5 +1,5 @@
 name: NetherWater
-version: "1.12.3"
+version: ${project.version}
 description: Allow players to use water in the nether
 author: ceskyDJ
 
@@ -35,7 +35,7 @@ permissions:
     description: Allows players to use water in all non disabled nether worlds
     default: op
 #  netherwater.use.WORLD:
-#    description: Allows players to use water in specific non disabled world
+#    description: Allows players to use water in specific non-disabled world
 
   netherwater.bypass:
     description: Allows players to bypass all possible stuff of the plugin

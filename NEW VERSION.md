@@ -1,6 +1,5 @@
 # How to publish new version
 
-* [ ] Edit "version" in plugin.yml
 * [ ] Edit "version" in pom.xml
 * [ ] Edit README.md if config has been  changed
 * [ ] Edit README.md if command list has been changed
