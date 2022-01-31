@@ -19,6 +19,7 @@ set by the plugin. For more information see "Permissions" and "Default configura
 - [BKCommonLib](https://www.spigotmc.org/resources/bkcommonlib.39590/) (optional) - need for damaging mobs feature
 - [Multiverse-Core](https://www.spigotmc.org/resources/multiverse-core.64450/) (optional) - worlds unloaded by
   Multiverse-Core is supported by this plugin
+- [Vault](https://www.spigotmc.org/resources/vault.34315/) (optional but recommended) - for offline player permissions (for dispensers working in autoloaded chunk), better support for permissions in general
 
 These are only NetherWater's direct dependencies! For the right functionality
 you need some other plugins (for example WorldEdit for WorldGuard). Read dependency
