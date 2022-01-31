@@ -8,6 +8,7 @@ import cz.ceskydj.netherwater.managers.PermissionManager;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.Container;
 import org.bukkit.block.data.Levelled;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -97,6 +98,11 @@ public class WaterPlaceListener implements Listener {
 
         // Check general conditions for using this plugin (world type, player permissions, world height etc.)
         if (!this.permissionManager.canBeUsedThisPlugin(player, selectedBlock)) {
+            return;
+        }
+
+        // Container opening has higher priority
+        if (eventBlock.getState() instanceof Container && !player.isSneaking()) {
             return;
         }
 
