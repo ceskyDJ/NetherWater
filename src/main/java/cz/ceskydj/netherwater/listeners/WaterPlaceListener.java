@@ -104,8 +104,8 @@ public class WaterPlaceListener implements Listener {
         // not for inserting, so it needs an exception
         if (eventBlock.getType() == Material.CAULDRON) {
             // If the player has bypass permission, the cauldron won't dry
-            boolean dry = !player.hasPermission("netherwater.disappearing.bypass")
-                    && !player.hasPermission("netherwater.drying.bypass");
+            boolean dry = !this.permissionManager.hasPermission("disappearing.bypass", player)
+                    && !this.permissionManager.hasPermission("drying.bypass", player);
             this.db.insertWaterBlock(eventBlock, WaterSource.BUCKET, dry);
 
             return;
@@ -123,7 +123,7 @@ public class WaterPlaceListener implements Listener {
         }
 
         // If the player has bypass permission, the water block won't disappear
-        boolean disappear = !player.hasPermission("netherwater.disappearing.bypass");
+        boolean disappear = !this.permissionManager.hasPermission("disappearing.bypass", player);
         this.db.insertWaterBlock(selectedBlock, WaterSource.BUCKET, disappear);
     }
 }

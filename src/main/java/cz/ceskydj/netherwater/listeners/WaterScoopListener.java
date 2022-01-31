@@ -55,11 +55,11 @@ public class WaterScoopListener implements Listener {
             return;
         }
 
-        if (player.hasPermission("netherwater.scooping.bypass")) {
+        if (this.permissionManager.hasPermission("scooping.bypass", player)) {
             this.messageManager.dump("Stopped by permissions");
         }
 
-        if (!this.configManager.isScoopingDisabled() || player.hasPermission("netherwater.scooping.bypass")) {
+        if (!this.configManager.isScoopingDisabled() || this.permissionManager.hasPermission("scooping.bypass", player)) {
             return;
         }
 

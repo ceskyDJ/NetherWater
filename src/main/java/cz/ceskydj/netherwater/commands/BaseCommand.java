@@ -3,6 +3,7 @@ package cz.ceskydj.netherwater.commands;
 import cz.ceskydj.netherwater.NetherWater;
 import cz.ceskydj.netherwater.exceptions.MissingPermissionException;
 import cz.ceskydj.netherwater.managers.MessageManager;
+import cz.ceskydj.netherwater.managers.PermissionManager;
 import cz.ceskydj.netherwater.updater.UpdateChecker;
 import org.bukkit.command.*;
 import org.bukkit.entity.Player;
@@ -16,11 +17,13 @@ import java.util.stream.Collectors;
 public class BaseCommand implements CommandExecutor, TabCompleter {
     private final NetherWater plugin;
     private final MessageManager messageManager;
+    private final PermissionManager permissionManager;
 
     public BaseCommand(NetherWater plugin) {
         this.plugin = plugin;
 
         this.messageManager = plugin.getMessageManager();
+        this.permissionManager = plugin.getPermissionManager();
     }
 
     @Override
@@ -72,11 +75,11 @@ public class BaseCommand implements CommandExecutor, TabCompleter {
     }
 
     private boolean hasPermission(CommandSender player, String commandName) {
-        if (player.hasPermission("netherwater.command.*")) {
+        if (this.permissionManager.hasPermission("command.*", player)) {
             return true;
         }
 
-        return player.hasPermission("netherwater.command." + commandName);
+        return this.permissionManager.hasPermission("command." + commandName, player);
     }
 
     private void help(CommandSender sender, String command) throws MissingPermissionException {

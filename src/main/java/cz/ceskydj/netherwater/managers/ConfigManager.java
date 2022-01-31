@@ -1,5 +1,7 @@
 package cz.ceskydj.netherwater.managers;
 
+import org.bukkit.World;
+
 import java.util.List;
 
 public class ConfigManager {
@@ -19,6 +21,10 @@ public class ConfigManager {
 
     public List<String> getDisabledWorlds() {
         return this.configManipulator.getStringList("disabled-worlds");
+    }
+
+    public boolean isDisabledWorld(World world) {
+        return this.configManipulator.getStringList("disabled-worlds").contains(world.getName());
     }
 
     public String getMessage(String name) {

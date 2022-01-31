@@ -18,11 +18,13 @@ import org.bukkit.event.block.BlockBreakEvent;
 public class BlockBreakListener implements Listener {
     private final MessageManager messageManager;
     private final ConfigManager configManager;
+    private final PermissionManager permissionManager;
     private final DB db;
 
     public BlockBreakListener(NetherWater plugin) {
         this.messageManager = plugin.getMessageManager();
         this.configManager = plugin.getConfigManager();
+        this.permissionManager = plugin.getPermissionManager();
         this.db = plugin.getDatabaseWrapper();
     }
 
@@ -40,7 +42,7 @@ public class BlockBreakListener implements Listener {
             return;
         }
 
-        if (this.configManager.getDisabledWorlds().contains(world.getName()) && !player.hasPermission("netherwater.world.bypass")) {
+        if (this.configManager.isDisabledWorld(world) && !this.permissionManager.hasPermission("world.bypass", player)) {
             return;
         }
 

@@ -11,6 +11,7 @@ softdepend:
   - WorldGuard
   - BKCommonLib
   - Multiverse-Core
+  - Vault
 
 commands:
   netherwater:

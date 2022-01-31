@@ -54,7 +54,7 @@ public class MobMoveListener implements Listener {
             return;
         }
 
-        if (this.configManager.getDisabledWorlds().contains(world.getName())) {
+        if (this.configManager.isDisabledWorld(world)) {
             return;
         }
 

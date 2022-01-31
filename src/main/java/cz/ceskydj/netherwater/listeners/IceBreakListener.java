@@ -63,7 +63,7 @@ public class IceBreakListener implements Listener {
         event.getBlock().setType(Material.WATER);
 
         // If the player has bypass permission, the water block won't disappear
-        boolean disappear = !player.hasPermission("netherwater.disappearing.bypass");
+        boolean disappear = !this.permissionManager.hasPermission("disappearing.bypass", player);
         this.db.insertWaterBlock(block, WaterSource.ICE, disappear);
     }
 }

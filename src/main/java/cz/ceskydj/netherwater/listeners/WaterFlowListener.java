@@ -3,6 +3,7 @@ package cz.ceskydj.netherwater.listeners;
 import cz.ceskydj.netherwater.NetherWater;
 import cz.ceskydj.netherwater.managers.ConfigManager;
 import cz.ceskydj.netherwater.managers.MessageManager;
+import cz.ceskydj.netherwater.managers.PermissionManager;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -17,12 +18,14 @@ public class WaterFlowListener implements Listener {
     private final NetherWater plugin;
     private final ConfigManager configManager;
     private final MessageManager messageManager;
+    private final PermissionManager permissionManager;
 
     public WaterFlowListener(NetherWater plugin) {
         this.plugin = plugin;
 
         this.configManager = plugin.getConfigManager();
         this.messageManager = plugin.getMessageManager();
+        this.permissionManager = plugin.getPermissionManager();
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -43,7 +46,7 @@ public class WaterFlowListener implements Listener {
             Player player = this.plugin.getClosestPlayer(event.getToBlock().getLocation());
             // There must be a player close to the event, otherwise there are no bypasses
             if (player != null) {
-                if (player.hasPermission("netherwater.spread.bypass")) {
+                if (this.permissionManager.hasPermission("spread.bypass", player)) {
                     return;
                 }
             }
@@ -54,7 +57,7 @@ public class WaterFlowListener implements Listener {
             return;
         }
 
-        if (this.configManager.getDisabledWorlds().contains(world.getName())) {
+        if (this.configManager.isDisabledWorld(world)) {
             return;
         }
 

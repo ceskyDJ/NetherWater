@@ -295,7 +295,7 @@ public class DB {
         return blocks;
     }
 
-    public Player getDispenserOwner(Block dispenser) {
+    public OfflinePlayer getDispenserOwner(Block dispenser) {
         try {
             String sql = "SELECT `player` FROM `" + this.DISPENSERS_TABLE + "` WHERE `x` = ? AND `y` = ? AND `z` = ? AND `world` = ?";
             PreparedStatement query = this.connection.prepareStatement(sql);
@@ -310,9 +310,8 @@ public class DB {
             resultSet.next();
 
             String playerUUID = resultSet.getString("player");
-            OfflinePlayer player = Bukkit.getOfflinePlayer(UUID.fromString(playerUUID));
 
-            return player.getPlayer();
+            return Bukkit.getOfflinePlayer(UUID.fromString(playerUUID));
         } catch (SQLException e) {
             this.messageManager.dump("DB error: " + e.getMessage());
 

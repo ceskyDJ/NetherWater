@@ -8,11 +8,11 @@ import cz.ceskydj.netherwater.managers.MessageManager;
 import cz.ceskydj.netherwater.managers.PermissionManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.Dispenser;
 import org.bukkit.block.data.Levelled;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -44,7 +44,7 @@ public class WaterDispenseListener implements Listener {
         ItemStack item = event.getItem();
 
         boolean fromDb = false;
-        Player player = this.plugin.getClosestPlayer(block.getLocation());
+        OfflinePlayer player = this.plugin.getClosestPlayer(block.getLocation());
         if (player == null) {
             // Works automatically without player (chunk loaded redstone circuit etc.)
             // In this case, owner of the dispenser will be used
@@ -73,10 +73,6 @@ public class WaterDispenseListener implements Listener {
         }
 
         if (player == null) {
-            if (!this.configManager.getDisabledWorlds().contains(world.getName())) {
-                event.setCancelled(true);
-            }
-
             return;
         }
 
@@ -103,7 +99,7 @@ public class WaterDispenseListener implements Listener {
             });
 
             // If the player has bypass permission, the water block won't disappear
-            boolean disappear = !player.hasPermission("netherwater.disappearing.bypass");
+            boolean disappear = !this.permissionManager.hasPermission("disappearing.bypass", player, world);
             this.db.insertWaterBlock(targetBlock, WaterSource.DISPENSER, disappear);
         } else if (item.getType() == Material.BUCKET) {
             Vector vector = event.getVelocity();
@@ -111,7 +107,7 @@ public class WaterDispenseListener implements Listener {
 
             this.db.deleteWaterBlock(targetBlock);
 
-            if (!this.configManager.isScoopingDisabled() || player.hasPermission("netherwater.scooping.bypass")) {
+            if (!this.configManager.isScoopingDisabled() || this.permissionManager.hasPermission("scooping.bypass", player, world)) {
                 return;
             }
 

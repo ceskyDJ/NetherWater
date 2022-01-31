@@ -19,12 +19,14 @@ import cz.ceskydj.netherwater.tasks.WaterAnimationAgent;
 import cz.ceskydj.netherwater.tasks.WaterDisappearingAgent;
 import cz.ceskydj.netherwater.tasks.WorldEditChangesAgent;
 import cz.ceskydj.netherwater.updater.UpdateChecker;
+import net.milkbowl.vault.permission.Permission;
 import org.bstats.bukkit.MetricsLite;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
 
@@ -32,6 +34,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class NetherWater extends JavaPlugin {
+    @SuppressWarnings("FieldCanBeLocal")
     private final int bStatsPluginId = 8833;
 
     private WorldGuardPlugin worldGuard = null;
@@ -51,12 +54,20 @@ public class NetherWater extends JavaPlugin {
         this.configManager = new ConfigManager(configManipulator);
         this.messageManager = new MessageManager(this);
         this.db = new DB("data.db", this);
-        this.permissionManager = new PermissionManager(this);
+        Permission vaultPermissions = this.setupVaultPermissions();
+        this.permissionManager = new PermissionManager(this, vaultPermissions);
 
         // Temporary storage for entities to be damaged
         this.entityStorage = new EntityStorage();
         // Temporary storage for blocks changed by WorldEdit
         this.worldEditChangesStorage = new WorldEditChangesStorage();
+
+        // Info about Vault permissions
+        if (vaultPermissions == null) {
+            this.messageManager.consoleMessage("There was a problem with loading Vault. Some functionality won't be available.", ChatColor.RED);
+        } else {
+            this.messageManager.consoleMessage("Vault has been registered and will be used for some extended functionality.", ChatColor.GREEN);
+        }
 
         // Load WorldGuard
         try {
@@ -107,8 +118,8 @@ public class NetherWater extends JavaPlugin {
             this.worldEdit.getWorldEdit().getEventBus().register(new WorldEditActionListener(this));
         }
 
-        this.getCommand("netherwater").setExecutor(new BaseCommand(this));
-        this.getCommand("netherwater").setTabCompleter(new BaseCommand(this));
+        Objects.requireNonNull(this.getCommand("netherwater")).setExecutor(new BaseCommand(this));
+        Objects.requireNonNull(this.getCommand("netherwater")).setTabCompleter(new BaseCommand(this));
 
         BukkitScheduler scheduler = this.getServer().getScheduler();
         // Water disappearing
@@ -186,6 +197,16 @@ public class NetherWater extends JavaPlugin {
         }
 
         return (MultiverseCore) plugin;
+    }
+
+    private Permission setupVaultPermissions() {
+        RegisteredServiceProvider<Permission> rsp = getServer().getServicesManager().getRegistration(Permission.class);
+
+        if (rsp == null) {
+            return null;
+        }
+
+        return rsp.getProvider();
     }
 
     public ConfigManager getConfigManager() {
