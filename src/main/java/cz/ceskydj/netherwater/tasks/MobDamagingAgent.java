@@ -13,6 +13,7 @@ import org.bukkit.block.data.Waterlogged;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByBlockEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.potion.PotionEffectType;
 
 public class MobDamagingAgent implements Runnable {
     EntityStorage entityStorage;
@@ -70,6 +71,11 @@ public class MobDamagingAgent implements Runnable {
             if (waterlogged != null && !waterlogged.isWaterlogged()) {
                 this.entityStorage.markEntityForDeletion(entity);
 
+                return;
+            }
+
+            // Ignore entities with fire resistance potion effect
+            if (entity.hasPotionEffect(PotionEffectType.FIRE_RESISTANCE)) {
                 return;
             }
 
