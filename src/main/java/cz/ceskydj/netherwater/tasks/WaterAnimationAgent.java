@@ -8,6 +8,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Levelled;
+import org.bukkit.block.data.Waterlogged;
 
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -33,8 +34,13 @@ public class WaterAnimationAgent implements Runnable {
         AtomicInteger animated = new AtomicInteger();
         blocks.forEach(block -> {
             String blockType = block.getType().toString();
+            Waterlogged waterlogged = null;
+            if (block.getBlockData() instanceof Waterlogged) {
+                waterlogged = (Waterlogged) block.getBlockData();
+            }
+
             // Comparing string due to compatibility issues
-            if (block.getType() != Material.WATER && !blockType.contains("CAULDRON")) {
+            if (block.getType() != Material.WATER && !blockType.contains("CAULDRON") && waterlogged == null) {
                 nonWaterBlocks.add(block);
                 this.messageManager.dump("Deleting block " + block + " due to type (" + block.getType() + ")");
                 return;
@@ -44,6 +50,13 @@ public class WaterAnimationAgent implements Runnable {
             if (blockType.contains("CAULDRON") && !(block.getBlockData() instanceof Levelled)) {
                 nonWaterBlocks.add(block);
                 this.messageManager.dump("Deleting block " + block + " due to level");
+                return;
+            }
+
+            // If it's water logged block, it must be inside of water
+            if (waterlogged != null && !waterlogged.isWaterlogged()) {
+                nonWaterBlocks.add(block);
+                this.messageManager.dump("Deleting block " + block + " due to water logged");
                 return;
             }
 

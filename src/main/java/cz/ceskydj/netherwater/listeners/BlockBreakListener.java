@@ -8,6 +8,8 @@ import cz.ceskydj.netherwater.managers.PermissionManager;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.block.data.Levelled;
+import org.bukkit.block.data.Waterlogged;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -47,9 +49,19 @@ public class BlockBreakListener implements Listener {
         }
 
         if (block.getType() == Material.CAULDRON) {
-            this.db.deleteWaterBlock(block);
-        } else if ( block.getType() == Material.DISPENSER) {
+            Levelled waterLevel = (Levelled) block.getBlockData();
+
+            if (waterLevel.getLevel() > 0) {
+                this.db.deleteWaterBlock(block);
+            }
+        } else if (block.getType() == Material.DISPENSER) {
             this.db.deleteDispenser(block);
+        } else if (block.getBlockData() instanceof Waterlogged) {
+            Waterlogged waterlogged = (Waterlogged) block.getBlockData();
+
+            if (waterlogged.isWaterlogged()) {
+                this.db.deleteWaterBlock(block);
+            }
         }
     }
 }

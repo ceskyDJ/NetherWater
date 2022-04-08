@@ -9,6 +9,7 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.Levelled;
+import org.bukkit.block.data.Waterlogged;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
@@ -58,12 +59,23 @@ public class MobMoveListener implements Listener {
             return;
         }
 
+        Waterlogged waterlogged = null;
+        if (block.getBlockData() instanceof Waterlogged) {
+            waterlogged = (Waterlogged) block.getBlockData();
+        }
+
         String blockType = block.getType().toString();
-        if (block.getType() != Material.WATER && !blockType.contains("CAULDRON")) {
+        if (block.getType() != Material.WATER && !blockType.contains("CAULDRON") && waterlogged == null) {
             return;
         }
 
+        // The cauldron must contain some water
         if (blockType.contains("CAULDRON") && !(block.getBlockData() instanceof Levelled)) {
+            return;
+        }
+
+        // Water logged block must be surrounded by water
+        if (waterlogged != null && !waterlogged.isWaterlogged()) {
             return;
         }
 

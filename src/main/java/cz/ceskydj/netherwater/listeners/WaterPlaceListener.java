@@ -7,9 +7,11 @@ import cz.ceskydj.netherwater.managers.MessageManager;
 import cz.ceskydj.netherwater.managers.PermissionManager;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.Container;
 import org.bukkit.block.data.Levelled;
+import org.bukkit.block.data.Waterlogged;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -38,25 +40,38 @@ public class WaterPlaceListener implements Listener {
     public void onPlayerInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
         ItemStack usedItem = event.getItem();
-        Block eventBlock = event.getClickedBlock();
+        Block clickedBlock = event.getClickedBlock();
         Block selectedBlock;
-        if (eventBlock != null) {
-            selectedBlock = eventBlock.getRelative(event.getBlockFace());
+        if (clickedBlock != null) {
+            selectedBlock = clickedBlock.getRelative(event.getBlockFace());
         } else {
             return;
         }
+        World world = clickedBlock.getWorld();
 
         Levelled level = null;
-        if (eventBlock.getBlockData() instanceof Levelled) {
-            level = (Levelled) eventBlock.getBlockData();
+        if (clickedBlock.getBlockData() instanceof Levelled) {
+            level = (Levelled) clickedBlock.getBlockData();
+        }
+
+        Waterlogged clickedWaterlogged = null;
+        if (clickedBlock.getBlockData() instanceof Waterlogged) {
+            clickedWaterlogged = (Waterlogged) clickedBlock.getBlockData();
+        }
+
+        Waterlogged selectedWaterlogged = null;
+        if (selectedBlock.getBlockData() instanceof Waterlogged) {
+            selectedWaterlogged = (Waterlogged) selectedBlock.getBlockData();
         }
 
         this.messageManager.dump("Player interact event has been handled.");
         this.messageManager.dump("- Action: " + event.getAction());
         this.messageManager.dump("- Item: " + (usedItem != null ? usedItem.getType() : "NULL"));
-        this.messageManager.dump("- Block: " + eventBlock.getBlockData().getAsString());
-        this.messageManager.dump("- Level: " + (level != null ? level.getLevel() : "NULL"));
-        this.messageManager.dump("- World: " + Objects.requireNonNull(selectedBlock).getWorld().getName() + " (type: " + selectedBlock.getWorld().getEnvironment() + ")");
+        this.messageManager.dump("- Block: " + clickedBlock.getBlockData().getAsString() + (!clickedBlock.getBlockData().getMaterial().isSolid() ? " (not solid)" : ""));
+        this.messageManager.dump("- Clicked block level: " + (level != null ? level.getLevel() : "NULL"));
+        this.messageManager.dump("- Clicked block watter logged: " + (clickedWaterlogged != null ? (clickedWaterlogged.isWaterlogged() ? "True" : "False") : "NULL"));
+        this.messageManager.dump("- Selected block watter logged: " + (selectedWaterlogged != null ? (selectedWaterlogged.isWaterlogged() ? "True" : "False") : "NULL"));
+        this.messageManager.dump("- World: " + world.getName() + " (type: " + world.getEnvironment() + ")");
         this.messageManager.dump("- Player: " + player);
 
         if (event.getAction() != Action.RIGHT_CLICK_BLOCK) {
@@ -69,16 +84,16 @@ public class WaterPlaceListener implements Listener {
 
         if (usedItem.getType() != Material.WATER_BUCKET) {
             // Cauldrons could be fill with glass bottles
-            if (!eventBlock.getType().toString().contains("CAULDRON")) {
+            if (!clickedBlock.getType().toString().contains("CAULDRON")) {
                 return;
             }
 
             if (usedItem.getType() != Material.POTION) {
                 // Filling empty glass bottle could completely empty cauldron
-                if (usedItem.getType() == Material.GLASS_BOTTLE && eventBlock.getBlockData() instanceof Levelled) {
-                    Levelled water_level = (Levelled) eventBlock.getBlockData();
+                if (usedItem.getType() == Material.GLASS_BOTTLE && clickedBlock.getBlockData() instanceof Levelled) {
+                    Levelled water_level = (Levelled) clickedBlock.getBlockData();
                     if (water_level.getLevel() == 1) {
-                        this.db.deleteWaterBlock(eventBlock);
+                        this.db.deleteWaterBlock(clickedBlock);
                     }
                 }
 
@@ -102,17 +117,17 @@ public class WaterPlaceListener implements Listener {
         }
 
         // Container opening has higher priority
-        if (eventBlock.getState() instanceof Container && !player.isSneaking()) {
+        if (clickedBlock.getState() instanceof Container && !player.isSneaking()) {
             return;
         }
 
         // FIX: cauldrons could be normally used in nether and this event is for placing water,
         // not for inserting, so it needs an exception
-        if (eventBlock.getType() == Material.CAULDRON) {
+        if (clickedBlock.getType() == Material.CAULDRON) {
             // If the player has bypass permission, the cauldron won't dry
             boolean dry = !this.permissionManager.hasPermission("disappearing.bypass", player)
                     && !this.permissionManager.hasPermission("drying.bypass", player);
-            this.db.insertWaterBlock(eventBlock, WaterSource.BUCKET, dry);
+            this.db.insertWaterBlock(clickedBlock, WaterSource.BUCKET, dry);
 
             return;
         }
@@ -120,8 +135,36 @@ public class WaterPlaceListener implements Listener {
         // Cancel native event actions
         event.setCancelled(true);
 
-        // Add water block
-        selectedBlock.setType(Material.WATER);
+        // Clicked block supports water logging (could be inside of water)
+        // Regularly the selected block (in front of the clicked one) is processed,
+        // so we need to replace the selected block with the clicked one to select
+        // the right block
+        if (clickedWaterlogged != null) {
+            selectedBlock = clickedBlock;
+            selectedWaterlogged = clickedWaterlogged;
+        }
+
+        // Add water
+        if (selectedWaterlogged != null) {
+            // Selected block supports water logging (could be inside of water)
+            // Set selected block as water logged
+            selectedWaterlogged.setWaterlogged(true);
+            selectedBlock.setBlockData(selectedWaterlogged);
+        } else {
+            // Selected block doesn't support water logging
+            Material selectedMaterial = selectedBlock.getBlockData().getMaterial();
+            if (selectedMaterial != Material.AIR && selectedMaterial != Material.CAVE_AIR && selectedMaterial.isSolid()) {
+                // Only air block or not solid block can be replaced with water
+                return;
+            }
+
+            // Break not solid block naturally before replacing with water
+            if (!selectedMaterial.isSolid()) {
+                selectedBlock.breakNaturally();
+            }
+
+            selectedBlock.setType(Material.WATER);
+        }
 
         // Replace water bucket with empty one
         if (player.getGameMode() != GameMode.CREATIVE) {

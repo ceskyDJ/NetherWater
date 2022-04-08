@@ -15,6 +15,7 @@ import org.bukkit.block.Dispenser;
 import org.bukkit.block.data.Directional;
 import org.bukkit.block.data.Levelled;
 import org.bukkit.block.data.Rotatable;
+import org.bukkit.block.data.Waterlogged;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -88,18 +89,42 @@ public class WaterDispenseListener implements Listener {
         Block targetBlock = block.getRelative(directional.getFacing(), 1);
         this.messageManager.dump("- Target block: " + targetBlock);
 
+        Waterlogged targetWaterlogged = null;
+        if (targetBlock.getBlockData() instanceof Waterlogged) {
+            targetWaterlogged = (Waterlogged) targetBlock.getBlockData();
+        }
+
         if (item.getType() == Material.WATER_BUCKET) {
             // There must be an air in front of dispenser
             Material targetMaterial = targetBlock.getBlockData().getMaterial();
-            if (targetMaterial != Material.AIR && targetMaterial != Material.CAVE_AIR) {
+            if (targetMaterial != Material.AIR && targetMaterial != Material.CAVE_AIR && targetWaterlogged == null) {
+                return;
+            }
+
+            // If water logged block, it must not be inside of water
+            if (targetWaterlogged != null && targetWaterlogged.isWaterlogged()) {
                 return;
             }
 
             // Cancel native event actions
             event.setCancelled(true);
 
-            // Add water block
-            targetBlock.setType(Material.WATER);
+            // Add water
+            if (targetWaterlogged != null) {
+                // Target block supports water logging (could be inside of water)
+                // Set selected block as water logged
+                targetWaterlogged.setWaterlogged(true);
+                targetBlock.setBlockData(targetWaterlogged);
+            } else {
+                // Target block doesn't support water logging
+
+                // Break not solid block naturally before replacing with water
+                if (!targetBlock.getBlockData().getMaterial().isSolid()) {
+                    targetBlock.breakNaturally();
+                }
+
+                targetBlock.setType(Material.WATER);
+            }
 
             // Replace water bucket with empty one
             Dispenser dispenser = (Dispenser) block.getState();
@@ -117,10 +142,16 @@ public class WaterDispenseListener implements Listener {
             this.db.deleteWaterBlock(targetBlock);
 
             // There must be a water block in front of dispenser
-            if (targetBlock.getBlockData().getMaterial() != Material.WATER) {
+            if (targetBlock.getBlockData().getMaterial() != Material.WATER && targetWaterlogged == null) {
                 return;
             }
 
+            // If water logged block, it must be inside of water
+            if (targetWaterlogged != null && !targetWaterlogged.isWaterlogged()) {
+                return;
+            }
+
+            // When scooping is enabled, just let Minecraft does the work (scoop water into bucket)
             if (!this.configManager.isScoopingDisabled() || this.permissionManager.hasPermission("scooping.bypass", player, world)) {
                 return;
             }
@@ -128,11 +159,19 @@ public class WaterDispenseListener implements Listener {
             // Cancel native event actions
             event.setCancelled(true);
 
-            // Remove water block
-            Levelled flowingWater = (Levelled) Material.WATER.createBlockData();
-            flowingWater.setLevel(1);
+            // Remove water
+            if (targetWaterlogged != null) {
+                // Water logged block --> set not water logged (remove water around it)
+                targetWaterlogged.setWaterlogged(false);
 
-            targetBlock.setBlockData(flowingWater);
+                targetBlock.setBlockData(targetWaterlogged);
+            } else {
+                // Water block --> set flow water instead of water source block
+                Levelled flowingWater = (Levelled) Material.WATER.createBlockData();
+                flowingWater.setLevel(1);
+
+                targetBlock.setBlockData(flowingWater);
+            }
         }
     }
 }

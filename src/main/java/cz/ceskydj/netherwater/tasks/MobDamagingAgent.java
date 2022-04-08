@@ -7,6 +7,7 @@ import cz.ceskydj.netherwater.managers.MessageManager;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.Levelled;
+import org.bukkit.block.data.Waterlogged;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByBlockEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -43,22 +44,42 @@ public class MobDamagingAgent implements Runnable {
             Block block = entity.getLocation().getBlock();
             String blockType = block.getType().toString();
 
+            Waterlogged waterlogged = null;
+            if (block.getBlockData() instanceof Waterlogged) {
+                waterlogged = (Waterlogged) block.getBlockData();
+            }
+
             // The mob must be in the water
             // Mobs outside the water are at the save place, so there is no reason to damage them
-            if (block.getType() == Material.WATER
-                    || (blockType.contains("CAULDRON") && block.getBlockData() instanceof Levelled)) {
-                double damageValue = entity instanceof Player
-                        ? this.configManager.getPlayerDamageValue()
-                        : this.configManager.getMobDamageValue();
-
-                EntityDamageEvent.DamageCause cause = EntityDamageEvent.DamageCause.LAVA;
-                EntityDamageByBlockEvent damageEvent = new EntityDamageByBlockEvent(block, entity, cause, damageValue);
-
-                entity.damage(damageValue);
-                entity.setLastDamageCause(damageEvent);
-            } else {
+            if (block.getType() != Material.WATER && !blockType.contains("CAULDRON") && waterlogged == null) {
                 this.entityStorage.markEntityForDeletion(entity);
+
+                return;
             }
+
+            // Cauldron must contain some water
+            if (blockType.contains("CAULDRON") && !(block.getBlockData() instanceof Levelled)) {
+                this.entityStorage.markEntityForDeletion(entity);
+
+                return;
+            }
+
+            // Water logged block must be surrounded by water
+            if (waterlogged != null && !waterlogged.isWaterlogged()) {
+                this.entityStorage.markEntityForDeletion(entity);
+
+                return;
+            }
+
+            double damageValue = entity instanceof Player
+                    ? this.configManager.getPlayerDamageValue()
+                    : this.configManager.getMobDamageValue();
+
+            EntityDamageEvent.DamageCause cause = EntityDamageEvent.DamageCause.LAVA;
+            EntityDamageByBlockEvent damageEvent = new EntityDamageByBlockEvent(block, entity, cause, damageValue);
+
+            entity.damage(damageValue);
+            entity.setLastDamageCause(damageEvent);
         });
 
         this.messageManager.dump("Damaged " + entityStorage.getEntities().size() + " entities.");

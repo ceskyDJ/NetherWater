@@ -2,6 +2,7 @@ package cz.ceskydj.netherwater.listeners;
 
 import cz.ceskydj.netherwater.NetherWater;
 import cz.ceskydj.netherwater.database.DB;
+import cz.ceskydj.netherwater.managers.MessageManager;
 import cz.ceskydj.netherwater.managers.PermissionManager;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -15,10 +16,12 @@ import org.bukkit.event.player.PlayerInteractEvent;
 public class WaterReplaceListener implements Listener {
     private final DB db;
     private final PermissionManager permissionManager;
+    private final MessageManager messageManager;
 
     public WaterReplaceListener(NetherWater plugin) {
         this.db = plugin.getDatabaseWrapper();
         this.permissionManager = plugin.getPermissionManager();
+        this.messageManager = plugin.getMessageManager();
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -45,6 +48,7 @@ public class WaterReplaceListener implements Listener {
             return;
         }
 
+        this.messageManager.dump("Deleted water block with replacing event");
         this.db.deleteWaterBlock(selectedBlock);
     }
 }

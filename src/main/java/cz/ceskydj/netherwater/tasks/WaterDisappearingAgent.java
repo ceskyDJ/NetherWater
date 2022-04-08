@@ -8,6 +8,7 @@ import cz.ceskydj.netherwater.managers.MessageManager;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.Levelled;
+import org.bukkit.block.data.Waterlogged;
 
 import java.util.List;
 
@@ -34,6 +35,10 @@ public class WaterDisappearingAgent implements Runnable {
 
         blocksForDisappearing.forEach(block -> {
             String blockType = block.getType().toString();
+            Waterlogged waterlogged = null;
+            if (block.getBlockData() instanceof Waterlogged) {
+                waterlogged = (Waterlogged) block.getBlockData();
+            }
 
             // Skip cauldrons, they will be processed later
             if (blockType.contains("CAULDRON")) {
@@ -48,6 +53,11 @@ public class WaterDisappearingAgent implements Runnable {
                 flowingWater.setLevel(1);
 
                 block.setBlockData(flowingWater);
+            } else if (waterlogged != null) {
+                // Set not water logged (remove water around block)
+                waterlogged.setWaterlogged(false);
+
+                block.setBlockData(waterlogged);
             }
         });
 

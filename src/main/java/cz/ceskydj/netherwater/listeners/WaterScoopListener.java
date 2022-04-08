@@ -8,6 +8,7 @@ import cz.ceskydj.netherwater.managers.PermissionManager;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.Levelled;
+import org.bukkit.block.data.Waterlogged;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -46,7 +47,12 @@ public class WaterScoopListener implements Listener {
             return;
         }
 
-        if (selectedBlock.getType() != Material.WATER) {
+        Waterlogged waterlogged = null;
+        if (selectedBlock.getBlockData() instanceof Waterlogged) {
+            waterlogged = (Waterlogged) selectedBlock.getBlockData();
+        }
+
+        if (selectedBlock.getType() != Material.WATER && (waterlogged == null || !waterlogged.isWaterlogged())) {
             return;
         }
 
@@ -66,11 +72,19 @@ public class WaterScoopListener implements Listener {
         // Cancel native event actions
         event.setCancelled(true);
 
-        // Remove water (set flow water instead of water source block)
-        Levelled flowingWater = (Levelled) Material.WATER.createBlockData();
-        flowingWater.setLevel(1);
+        // Remove water
+        if (waterlogged != null) {
+            // Water logged block --> set not water logged (remove water around it)
+            waterlogged.setWaterlogged(false);
 
-        selectedBlock.setBlockData(flowingWater);
+            selectedBlock.setBlockData(waterlogged);
+        } else {
+            // Water block --> set flow water instead of water source block
+            Levelled flowingWater = (Levelled) Material.WATER.createBlockData();
+            flowingWater.setLevel(1);
+
+            selectedBlock.setBlockData(flowingWater);
+        }
 
         this.db.deleteWaterBlock(selectedBlock);
     }
