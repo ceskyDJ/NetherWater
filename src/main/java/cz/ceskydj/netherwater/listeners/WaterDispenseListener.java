@@ -12,7 +12,9 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.Dispenser;
+import org.bukkit.block.data.Directional;
 import org.bukkit.block.data.Levelled;
+import org.bukkit.block.data.Rotatable;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -80,13 +82,23 @@ public class WaterDispenseListener implements Listener {
             return;
         }
 
+        // event.getVelocity() + counting target block from vector could be used here,
+        // but it isn't working properly when there isn't air block in front of dispenser
+        Directional directional = (Directional) block.getBlockData();
+        Block targetBlock = block.getRelative(directional.getFacing(), 1);
+        this.messageManager.dump("- Target block: " + targetBlock);
+
         if (item.getType() == Material.WATER_BUCKET) {
+            // There must be an air in front of dispenser
+            Material targetMaterial = targetBlock.getBlockData().getMaterial();
+            if (targetMaterial != Material.AIR && targetMaterial != Material.CAVE_AIR) {
+                return;
+            }
+
             // Cancel native event actions
             event.setCancelled(true);
 
             // Add water block
-            Vector vector = event.getVelocity();
-            Block targetBlock = block.getWorld().getBlockAt(vector.getBlockX(), vector.getBlockY(), vector.getBlockZ());
             targetBlock.setType(Material.WATER);
 
             // Replace water bucket with empty one
@@ -102,10 +114,12 @@ public class WaterDispenseListener implements Listener {
             boolean disappear = !this.permissionManager.hasPermission("disappearing.bypass", player, world);
             this.db.insertWaterBlock(targetBlock, WaterSource.DISPENSER, disappear);
         } else if (item.getType() == Material.BUCKET) {
-            Vector vector = event.getVelocity();
-            Block targetBlock = block.getWorld().getBlockAt(vector.getBlockX(), vector.getBlockY(), vector.getBlockZ());
-
             this.db.deleteWaterBlock(targetBlock);
+
+            // There must be a water block in front of dispenser
+            if (targetBlock.getBlockData().getMaterial() != Material.WATER) {
+                return;
+            }
 
             if (!this.configManager.isScoopingDisabled() || this.permissionManager.hasPermission("scooping.bypass", player, world)) {
                 return;
