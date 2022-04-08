@@ -4,7 +4,9 @@ import cz.ceskydj.netherwater.NetherWater;
 import cz.ceskydj.netherwater.database.EntityStorage;
 import cz.ceskydj.netherwater.managers.ConfigManager;
 import cz.ceskydj.netherwater.managers.MessageManager;
+import org.bukkit.Difficulty;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.Levelled;
 import org.bukkit.block.data.Waterlogged;
@@ -71,8 +73,16 @@ public class MobDamagingAgent implements Runnable {
                 return;
             }
 
+            World world = entity.getLocation().getWorld();
+            int difficulty;
+            if (world != null) {
+                difficulty = world.getDifficulty().ordinal();
+            } else {
+                difficulty = 1;
+            }
+
             double damageValue = entity instanceof Player
-                    ? this.configManager.getPlayerDamageValue()
+                    ? this.configManager.getPlayerDamageValue() * difficulty
                     : this.configManager.getMobDamageValue();
 
             EntityDamageEvent.DamageCause cause = EntityDamageEvent.DamageCause.LAVA;
