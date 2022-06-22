@@ -115,7 +115,7 @@ public class MobMoveListener implements Listener {
         // EntityType enum isn't used due to compatibility issues
         String[] exceptEntities = {
                 "DOLPHIN", "DROWNED", "ELDER_GUARDIAN", "TROPICAL_FISH", "GUARDIAN", "PUFFERFISH", "TURTLE",
-                "SQUID", "AXOLOTL", "TROPICAL_FISH", "GLOW_SQUID", "COD", "SALMON"
+                "SQUID", "AXOLOTL", "TROPICAL_FISH", "GLOW_SQUID", "COD", "SALMON", "FROG", "TADPOLE"
         };
 
         for (String modifiedEntity : exceptEntities) {
