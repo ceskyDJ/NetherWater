@@ -12,6 +12,13 @@ ones. Players are damaged, too, of course.
 All these features can be configured to your needs. You can completely disable special functionality and limitations
 set by the plugin. For more information see "Permissions" and "Default configuration" sections, please.
 
+
+## Support
+
+Do you like my plugin? You can buy me a pizza or start supporting me using membership!
+
+<a href="https://www.buymeacoffee.com/ceskyDJ"><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a pizza&emoji=🍕&slug=ceskyDJ&button_colour=FFDD00&font_colour=000000&font_family=Cookie&outline_colour=000000&coffee_colour=ffffff" /></a>
+
 ## Dependencies
 - [WorldEdit](https://enginehub.org/worldedit/) (optional) - if you use WorldEdit, world changes are linked to this
   plugin (creating or deleting water blocks)
@@ -133,9 +140,3 @@ messages:
   check.latest: "&aYou have the newest version of the plugin."
   check.error: "&cUpdate check hasn't been successful."
 ```
-
-## Support
-
-Do you like my plugin? You can buy me a coffee!
-
-[!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/gbraad)
