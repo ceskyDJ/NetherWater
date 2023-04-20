@@ -61,7 +61,11 @@ public class WaterDispenseListener implements Listener {
         this.messageManager.dump("- Block's metadata: " + block.getBlockData().getAsString(true));
         this.messageManager.dump("- Item: " + item.getType().name());
         this.messageManager.dump("- Item's metadata: " + item.getItemMeta());
-        this.messageManager.dump("- Responsible player: " + player + (fromDb ? "(from DB)" : ""));
+        if (player != null) {
+            this.messageManager.dump("- Responsible player: " + player.getName() + (fromDb ? " (from DB)" : ""));
+        } else {
+            this.messageManager.dump("- Responsible player: unknown (no closed player and dispensed isn't registered)");
+        }
 
         if (block.getType() != Material.DISPENSER) {
             return;

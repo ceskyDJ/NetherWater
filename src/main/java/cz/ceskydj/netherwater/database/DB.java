@@ -306,12 +306,38 @@ public class DB {
             query.setString(4, dispenser.getWorld().getName());
 
             ResultSet resultSet = query.executeQuery();
-            // Get first result item
-            resultSet.next();
+            // Get first result item (if there is any)
+            if (!resultSet.next()) {
+                this.messageManager.dump("Found unregistered dispenser block (not found in DB) on [" + dispenser.getX() + ", " + dispenser.getY() + ", " + dispenser.getZ() + "]");
 
-            String playerUUID = resultSet.getString("player");
+                return null;
+            }
 
-            return Bukkit.getOfflinePlayer(UUID.fromString(playerUUID));
+            try {
+                String stringyPlayerUUID = resultSet.getString("player");
+                if (stringyPlayerUUID == null) {
+                    this.messageManager.dump("Found corrupted dispenser record in DB (column player has value NULL) for dispenser on [" + dispenser.getX() + ", " + dispenser.getY() + ", " + dispenser.getZ() + "]. Removing...");
+                    this.deleteDispenser(dispenser);
+
+                    return null;
+                }
+
+                UUID playerUUID = UUID.fromString(stringyPlayerUUID);
+                OfflinePlayer player = Bukkit.getOfflinePlayer(playerUUID);
+                if (player.getName() == null) {
+                    this.messageManager.dump("Found registered dispenser with unknown owner (player couldn't been found using stored UUID) on [" + dispenser.getX() + ", " + dispenser.getY() + ", " + dispenser.getZ() + "]. Removing...");
+                    this.deleteDispenser(dispenser);
+
+                    return null;
+                }
+
+                return player;
+            } catch (IllegalArgumentException e) {
+                this.messageManager.dump("Found registered dispenser with invalid player UUID on [" + dispenser.getX() + ", " + dispenser.getY() + ", " + dispenser.getZ() + "]. Removing...");
+                this.deleteDispenser(dispenser);
+
+                return null;
+            }
         } catch (SQLException e) {
             this.messageManager.dump("DB error: " + e.getMessage());
 
