@@ -67,6 +67,12 @@ some NetherWater's functionality will be turned off.
 Statistics are provided by [BStats](https://bstats.org/plugin/bukkit/Nether%20Water/8833).
 ![BStats statistics](https://bstats.org/signatures/bukkit/Nether%20Water.svg "BStats statistics - how many servers and players use the plugin")
 
+## Discord server
+
+Do you want to chat about this plugin? You can do that on Discord server: https://discord.gg/gsxBQkxw8x. Don't forget
+the main place for reporting issues is still GitHub, Discord is just an possible alternative, if you have more specific
+problem that needs to be discussed more interactively.
+
 ## Default configuration
 
 Never use `debug: true` when you are running plugin on a public and/or production server! Console messages are slow,
