@@ -1,5 +1,6 @@
 package cz.ceskydj.netherwater.tasks;
 
+import com.bergerkiller.bukkit.common.wrappers.DamageSource;
 import cz.ceskydj.netherwater.NetherWater;
 import cz.ceskydj.netherwater.database.EntityStorage;
 import cz.ceskydj.netherwater.managers.ConfigManager;
@@ -10,8 +11,6 @@ import org.bukkit.block.Block;
 import org.bukkit.block.data.Levelled;
 import org.bukkit.block.data.Waterlogged;
 import org.bukkit.entity.Player;
-import org.bukkit.event.entity.EntityDamageByBlockEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.potion.PotionEffectType;
 
 public class MobDamagingAgent implements Runnable {
@@ -90,11 +89,7 @@ public class MobDamagingAgent implements Runnable {
                     ? this.configManager.getPlayerDamageValue() * difficulty
                     : this.configManager.getMobDamageValue();
 
-            EntityDamageEvent.DamageCause cause = EntityDamageEvent.DamageCause.LAVA;
-            EntityDamageByBlockEvent damageEvent = new EntityDamageByBlockEvent(block, entity, cause, damageValue);
-
-            entity.damage(damageValue);
-            entity.setLastDamageCause(damageEvent);
+            entity.damage(damageValue, DamageSource.LAVA.getEntity());
         });
 
         this.messageManager.dump("Damaged " + entityStorage.getEntities().size() + " entities.");

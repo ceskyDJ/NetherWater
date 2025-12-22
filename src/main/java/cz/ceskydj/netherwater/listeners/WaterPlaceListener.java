@@ -23,6 +23,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionType;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Objects;
 
 public class WaterPlaceListener implements Listener {
@@ -37,7 +39,7 @@ public class WaterPlaceListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    public void onPlayerInteract(PlayerInteractEvent event) {
+    public void onPlayerInteract(PlayerInteractEvent event) throws InvocationTargetException, IllegalAccessException {
         Player player = event.getPlayer();
         ItemStack usedItem = event.getItem();
         Block clickedBlock = event.getClickedBlock();
@@ -105,8 +107,8 @@ public class WaterPlaceListener implements Listener {
                 return;
             }
 
-            PotionMeta potionMetadata = (PotionMeta) metadata;
-            if (potionMetadata.getBasePotionData().getType() != PotionType.WATER) {
+            PotionType potionType = getPotionType(metadata);
+            if (potionType != PotionType.WATER) {
                 return;
             }
         }
@@ -174,5 +176,21 @@ public class WaterPlaceListener implements Listener {
         // If the player has bypass permission, the water block won't disappear
         boolean disappear = !this.permissionManager.hasPermission("disappearing.bypass", player);
         this.db.insertWaterBlock(selectedBlock, WaterSource.BUCKET, disappear);
+    }
+
+    private PotionType getPotionType(ItemMeta metadata) throws IllegalAccessException, InvocationTargetException {
+        PotionMeta potionMetadata = (PotionMeta) metadata;
+        PotionType potionType;
+        try {
+            // 1.20.6+
+            Method getBasePotionType = metadata.getClass().getMethod("getBasePotionType");
+
+            getBasePotionType.setAccessible(true);
+            potionType = (PotionType) getBasePotionType.invoke(potionMetadata);
+        } catch (NoSuchMethodException|IllegalArgumentException e) {
+            // Legacy mode (< 1.20.6)
+            potionType = potionMetadata.getBasePotionData().getType();
+        }
+        return potionType;
     }
 }

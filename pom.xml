@@ -84,6 +84,7 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
+            <!-- Last checked API: 1.21.11-R0.1-SNAPSHOT -->
             <version>1.13.2-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
