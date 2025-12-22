@@ -1,8 +1,8 @@
 package cz.ceskydj.netherwater.database;
 
-import com.onarandombox.MultiverseCore.MultiverseCore;
-import com.onarandombox.MultiverseCore.api.MVWorldManager;
 import cz.ceskydj.netherwater.NetherWater;
+import cz.ceskydj.netherwater.compatibility.multiversecore.WorldManager;
+import cz.ceskydj.netherwater.compatibility.multiversecore.MultiverseCore;
 import cz.ceskydj.netherwater.managers.MessageManager;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -381,16 +381,16 @@ public class DB {
             return true;
         }
 
-        MVWorldManager worldManager = this.multiverseCore.getMVWorldManager();
+        WorldManager worldManager = this.multiverseCore.getMVWorldManager();
 
         // World isn't a valid one or has already been removed
-        if (worldManager.isMVWorld(world)) {
+        if (worldManager.isWorld(world)) {
             return true;
         }
 
         // If the world isn't exists, its records will be removed (true returned)
         // In other cases, the world is unloaded, so no actions are required to do
-        return !worldManager.hasUnloadedWorld(world, true);
+        return !worldManager.isUnloadedWorld(world);
     }
 
     private void deleteBlock(int x, int y, int z, String world, String table) {

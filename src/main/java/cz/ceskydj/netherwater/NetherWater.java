@@ -1,9 +1,9 @@
 package cz.ceskydj.netherwater;
 
 import com.bergerkiller.bukkit.common.internal.CommonPlugin;
-import com.onarandombox.MultiverseCore.MultiverseCore;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
+import cz.ceskydj.netherwater.compatibility.multiversecore.MultiverseCore;
 import cz.ceskydj.netherwater.commands.BaseCommand;
 import cz.ceskydj.netherwater.database.DB;
 import cz.ceskydj.netherwater.database.EntityStorage;
@@ -21,6 +21,7 @@ import cz.ceskydj.netherwater.tasks.WorldEditChangesAgent;
 import cz.ceskydj.netherwater.updater.UpdateChecker;
 import net.milkbowl.vault.permission.Permission;
 import org.bstats.bukkit.MetricsLite;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -29,7 +30,9 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
+import org.mvplugins.multiverse.core.MultiverseCoreApi;
 
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Objects;
 
@@ -164,49 +167,78 @@ public class NetherWater extends JavaPlugin {
     }
 
     private WorldGuardPlugin loadWorldGuard() throws PluginNotFoundException {
-        Plugin plugin = this.getServer().getPluginManager().getPlugin("WorldGuard");
+        try {
+            Plugin plugin = this.getServer().getPluginManager().getPlugin("WorldGuard");
 
-        if (!(plugin instanceof WorldGuardPlugin)) {
+            if (!(plugin instanceof WorldGuardPlugin)) {
+                throw new PluginNotFoundException("Plugin WorldGuard hasn't been found.");
+            }
+
+            return (WorldGuardPlugin) plugin;
+        } catch (NoClassDefFoundError e) {
             throw new PluginNotFoundException("Plugin WorldGuard hasn't been found.");
         }
-
-        return (WorldGuardPlugin) plugin;
     }
 
     private boolean isBKCommonLibInstalled() {
-        Plugin plugin = this.getServer().getPluginManager().getPlugin("BKCommonLib");
+        try {
+            Plugin plugin = this.getServer().getPluginManager().getPlugin("BKCommonLib");
 
-        return (plugin instanceof CommonPlugin);
+            return (plugin instanceof CommonPlugin);
+        } catch (NoClassDefFoundError e) {
+            return false;
+        }
     }
 
     private WorldEditPlugin loadWorldEdit() throws PluginNotFoundException {
-        Plugin plugin = this.getServer().getPluginManager().getPlugin("WorldEdit");
+        try {
+            Plugin plugin = this.getServer().getPluginManager().getPlugin("WorldEdit");
 
-        if (!(plugin instanceof WorldEditPlugin)) {
+            if (!(plugin instanceof WorldEditPlugin)) {
+                throw new PluginNotFoundException("Plugin WorldEdit hasn't been found.");
+            }
+
+            return (WorldEditPlugin) plugin;
+        } catch (NoClassDefFoundError e) {
             throw new PluginNotFoundException("Plugin WorldEdit hasn't been found.");
         }
-
-        return (WorldEditPlugin) plugin;
     }
 
     private MultiverseCore loadMultiverseCore() throws PluginNotFoundException {
-        Plugin plugin = this.getServer().getPluginManager().getPlugin("Multiverse-Core");
+        try {
+            // Multiverse-Core 5.0.0+
+            MultiverseCoreApi coreApi = MultiverseCoreApi.get();
 
-        if (!(plugin instanceof MultiverseCore)) {
-            throw new PluginNotFoundException("Plugin Multiverse-Core hasn't been found.");
+            return new MultiverseCore(coreApi);
+        } catch (NoClassDefFoundError|IllegalStateException e) {
+            // Legacy support for Multiverse-Core 4.1.0+ (< 5.0.0)
+            Plugin plugin = this.getServer().getPluginManager().getPlugin("Multiverse-Core");
+
+            try {
+                if (!(plugin instanceof com.onarandombox.MultiverseCore.MultiverseCore)) {
+                    throw new PluginNotFoundException("Plugin Multiverse-Core hasn't been found.");
+                }
+
+                return new MultiverseCore((com.onarandombox.MultiverseCore.MultiverseCore) plugin);
+            } catch (NoClassDefFoundError e2) {
+                throw new PluginNotFoundException("Plugin Multiverse-Core hasn't been found.");
+            }
         }
-
-        return (MultiverseCore) plugin;
     }
 
+    @Nullable
     private Permission setupVaultPermissions() {
-        RegisteredServiceProvider<Permission> rsp = getServer().getServicesManager().getRegistration(Permission.class);
+        try {
+            RegisteredServiceProvider<Permission> rsp = getServer().getServicesManager().getRegistration(Permission.class);
 
-        if (rsp == null) {
+            if (rsp == null) {
+                return null;
+            }
+
+            return rsp.getProvider();
+        } catch (NoClassDefFoundError e) {
             return null;
         }
-
-        return rsp.getProvider();
     }
 
     public ConfigManager getConfigManager() {
