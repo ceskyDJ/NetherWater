@@ -2,7 +2,7 @@ package cz.ceskydj.netherwater.updater;
 
 /**
  * @author slees
- * @link https://www.spigotmc.org/threads/resource-update-check-clean-simple.329894/
+ * @link <a href="https://www.spigotmc.org/threads/resource-update-check-clean-simple.329894/">Source</a>
  */
 public enum VersionResponse {
     LATEST,

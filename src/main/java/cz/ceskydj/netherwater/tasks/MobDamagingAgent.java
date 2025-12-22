@@ -4,7 +4,6 @@ import cz.ceskydj.netherwater.NetherWater;
 import cz.ceskydj.netherwater.database.EntityStorage;
 import cz.ceskydj.netherwater.managers.ConfigManager;
 import cz.ceskydj.netherwater.managers.MessageManager;
-import org.bukkit.Difficulty;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;

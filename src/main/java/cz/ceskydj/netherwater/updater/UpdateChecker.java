@@ -16,7 +16,7 @@ import java.util.function.BiConsumer;
 
 /**
  * @author slees
- * @link https://www.spigotmc.org/threads/resource-update-check-clean-simple.329894/
+ * @link <a href="https://www.spigotmc.org/threads/resource-update-check-clean-simple.329894/">Source</a>
  */
 public class UpdateChecker {
     private static final String SPIGOT_URL = "https://api.spigotmc.org/legacy/update.php?resource=%d";
@@ -58,6 +58,7 @@ public class UpdateChecker {
 
                 Bukkit.getScheduler().runTask(this.javaPlugin, () -> this.versionResponse.accept(latestVersion ? VersionResponse.LATEST : VersionResponse.FOUND_NEW, latestVersion ? this.currentVersion : fetchedVersion));
             } catch (IOException exception) {
+                //noinspection CallToPrintStackTrace
                 exception.printStackTrace();
                 Bukkit.getScheduler().runTask(this.javaPlugin, () -> this.versionResponse.accept(VersionResponse.UNAVAILABLE, null));
             }

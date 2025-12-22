@@ -2,8 +2,6 @@ package cz.ceskydj.netherwater.managers;
 
 import org.bukkit.World;
 
-import java.util.List;
-
 public class ConfigManager {
     private final ConfigManipulator configManipulator;
 
@@ -17,10 +15,6 @@ public class ConfigManager {
 
     public boolean isDebugOn() {
         return this.configManipulator.getBoolean("debug");
-    }
-
-    public List<String> getDisabledWorlds() {
-        return this.configManipulator.getStringList("disabled-worlds");
     }
 
     public boolean isDisabledWorld(World world) {

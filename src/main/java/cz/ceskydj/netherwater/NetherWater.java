@@ -21,7 +21,6 @@ import cz.ceskydj.netherwater.tasks.WorldEditChangesAgent;
 import cz.ceskydj.netherwater.updater.UpdateChecker;
 import net.milkbowl.vault.permission.Permission;
 import org.bstats.bukkit.MetricsLite;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
